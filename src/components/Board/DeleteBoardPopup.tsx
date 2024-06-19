@@ -26,16 +26,6 @@ const DeleteBoardPopup: React.FC<DeleteBoardPopupProps> = ({ onClose, onDelete }
 
     const handleDelete = () => {
         onDelete();
-        toast.success('Delete Board Success', {
-            position: "bottom-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-        });
     };
 
     return (

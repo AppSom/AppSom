@@ -9,6 +9,8 @@ import DeleteBoardPopup from "../Board/DeleteBoardPopup";
 import MemberListPopup from "../Board/MemberListPopup";
 import { useRouter } from "next/navigation";
 import CheckOwner from "@/lib/CheckOwner";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function BoardNav({ board }: { board: Board }) {
     const [showEditPopup, setShowEditPopup] = useState<boolean>(false);
@@ -60,6 +62,16 @@ export default function BoardNav({ board }: { board: Board }) {
         await DeleteBoardById(board.id);
         setShowDeletePopup(false);
         router.push('/board');
+        toast.success('Delete Board Success', {
+            position: "bottom-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+        });
     };
 
     return (

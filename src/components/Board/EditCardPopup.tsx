@@ -31,16 +31,31 @@ const EditCardPopup: React.FC<EditCardPopupProps> = ({ card, onClose, onSave }) 
             });
             return;
         }
-        toast.success('Edit Card Success', {
-            position: "bottom-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-        });
+        else if (new Date(dateEnd) < new Date(dateStart)) {
+            toast.error('Your Date is Wrong', {
+                position: "bottom-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+            });
+            return;
+        }
+        else{
+            toast.success('Edit Card Success', {
+                position: "bottom-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+            });
+        }
         onSave({ ...card, name, description, date_start: dateStart, date_end: dateEnd, color });
         onClose();
     };

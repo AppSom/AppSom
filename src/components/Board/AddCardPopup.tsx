@@ -33,8 +33,7 @@ const AddCardPopup: React.FC<AddCardPopupProps> = ({ listId, onClose, onSave }) 
             });
             return;
         }
-
-        if (new Date(dateEnd) < new Date(dateStart)) {
+        else if (new Date(dateEnd) < new Date(dateStart)) {
             toast.error('Your Date is Wrong', {
                 position: "bottom-right",
                 autoClose: 5000,
@@ -47,6 +46,18 @@ const AddCardPopup: React.FC<AddCardPopupProps> = ({ listId, onClose, onSave }) 
             });
             return;
         }
+        else{
+            toast.success('Add Card Success', {
+                position: "bottom-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+            });
+        }
 
         const newCard: Card = {
             id: crypto.randomUUID(),
@@ -58,17 +69,6 @@ const AddCardPopup: React.FC<AddCardPopupProps> = ({ listId, onClose, onSave }) 
             member: [],
             list: listId,
         };
-
-        toast.success('Add Card Success', {
-            position: "bottom-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-        });
         onSave(newCard);
         onClose();
     };

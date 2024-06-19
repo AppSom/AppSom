@@ -24,7 +24,6 @@ const DeleteCardPopup: React.FC<DeleteCardPopupProps> = ({ onClose, onDelete }) 
     }, [onClose]);
 
     const handleDelete = () => {
-        onDelete();
         toast.success('Delete Card Success', {
             position: "bottom-right",
             autoClose: 5000,
@@ -35,6 +34,7 @@ const DeleteCardPopup: React.FC<DeleteCardPopupProps> = ({ onClose, onDelete }) 
             progress: undefined,
             theme: "light",
         });
+        onDelete();
         onClose();
     };
 
@@ -47,7 +47,6 @@ const DeleteCardPopup: React.FC<DeleteCardPopupProps> = ({ onClose, onDelete }) 
                     <button onClick={handleDelete} className="bg-red-500 text-white p-2 px-10 font-bold rounded">Delete</button>
                 </div>
             </div>
-            <ToastContainer />
         </div>
     );
 };

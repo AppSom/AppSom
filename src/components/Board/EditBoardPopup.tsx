@@ -29,16 +29,19 @@ const EditBoardPopup: React.FC<EditBoardPopupProps> = ({ board, onClose, onSave 
             });
             return;
         }
-        toast.success('Edit Board Success', {
-            position: "bottom-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-        });
+        else{
+            toast.success('Edit Board Success', {
+                position: "bottom-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+            });
+        }
+        
         onSave({ ...board, name, description, color });
         onClose();
     };
@@ -93,7 +96,6 @@ const EditBoardPopup: React.FC<EditBoardPopupProps> = ({ board, onClose, onSave 
                     </button>
                 </div>
             </div>
-            <ToastContainer />
         </div>
     );
 };

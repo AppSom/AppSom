@@ -321,7 +321,7 @@ const BoardIdPage: React.FC<BoardIdPageProps> = ({ params }) => {
                             {
                                 CheckOwner(board.owner, session.user.id) ? 
                                 <button
-                                    className="p-5 bg-sombar hover:bg-som font-bold shadow-inner drop-shadow-xl rounded w-[200px]"
+                                    className="p-5 bg-sombar hover:bg-som font-bold shadow-inner drop-shadow-xl rounded w-[200px] text-xl"
                                     onClick={() => setShowAddListPopup(true)}
                                 >
                                     + Add a List

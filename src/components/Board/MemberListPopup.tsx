@@ -70,11 +70,6 @@ const MemberListPopup: React.FC<MemberListPopupProps> = ({ bid, onClose }) => {
     };
 
     const handleAddMember = async (user: User) => {
-        await AddMemberBoard(user.id, board.id);
-        setMembers([...members, user]);
-        setBoard({ ...board, member: [...board.member, user.id]});
-        setSearchResults([]);
-        setSearchTerm('');
         toast.success('Add Member Success', {
             position: "bottom-right",
             autoClose: 5000,
@@ -85,14 +80,14 @@ const MemberListPopup: React.FC<MemberListPopupProps> = ({ bid, onClose }) => {
             progress: undefined,
             theme: "light",
         });
+        await AddMemberBoard(user.id, board.id);
+        setMembers([...members, user]);
+        setBoard({ ...board, member: [...board.member, user.id]});
+        setSearchResults([]);
+        setSearchTerm('');
     };
 
     const handleRemoveMember = async (uid: string) => {
-        await RemoveMemberBoard(uid, board.id);
-        setMembers(members.filter(u => u.id != uid));
-        setBoard({ ...board, member: board.member.filter(m => m != uid)});
-        setSearchResults([]);
-        setSearchTerm('');
         toast.success('Delete Member Success', {
             position: "bottom-right",
             autoClose: 5000,
@@ -103,6 +98,11 @@ const MemberListPopup: React.FC<MemberListPopupProps> = ({ bid, onClose }) => {
             progress: undefined,
             theme: "light",
         });
+        await RemoveMemberBoard(uid, board.id);
+        setMembers(members.filter(u => u.id != uid));
+        setBoard({ ...board, member: board.member.filter(m => m != uid)});
+        setSearchResults([]);
+        setSearchTerm('');
     }
 
     return (
