@@ -294,7 +294,8 @@ export default function Calendar() {
       {selectedCard && (
         <ViewCardPopup
           onClose={handleClosePopup}
-          card={selectedCard}
+          cid={selectedCard.id}
+          lid={selectedCard.list}
         />
       )}
     </div>

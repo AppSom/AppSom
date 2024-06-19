@@ -8,11 +8,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <>
+    <main className="text-black">
     <ThemeProvider>
         <Sidebar/>
         {children}
     </ThemeProvider>
-    </>
+    </main>
   );
 }

@@ -83,7 +83,7 @@ export default function Sidebar() {
     <div className="fixed left-0 top-0 h-full w-64 bg-som text-white flex flex-col justify-between p-4 font-sans font-bold tracking-wider">
       <div>
         <div className="flex justify-center mt-2 mb-4">
-          <Link href="/board">
+          <Link href="/">
             <Image
               src={convertImgUrl(logoUrl)}
               alt="Logo"

@@ -98,7 +98,7 @@ export default function CardList({ list, onEditCard, onAddCard, permission }: Ca
                         <Draggable key={c.id} draggableId={c.id} index={index}>
                             {(provided) => (
                                 <div
-                                    className="bg-white shadow-lg w-full px-3 py-2 rounded flex flex-row items-center gap-2"
+                                    className="bg-white shadow-lg w-full px-3 py-2 rounded flex flex-row items-center gap-2 hover:bg-gray-400"
                                     {...provided.draggableProps}
                                     {...provided.dragHandleProps}
                                     ref={provided.innerRef}

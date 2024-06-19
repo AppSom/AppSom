@@ -22,6 +22,19 @@
                 "89f5bb2a-77a8-48f4-9f6e-18ff7ce7bf0b"
               ],
               "list": "list1"
+            },
+            {
+              "id": "56ea214e-62ce-45e2-9f5e-554a15470bd8",
+              "name": "Task 3",
+              "description": "This is task 3",
+              "date_start": "2024-06-19",
+              "date_end": "2024-06-25",
+              "color": "gray",
+              "member": [
+                "75c8ba78-d371-4ff6-be29-1139cfebf33c",
+                "89f5bb2a-77a8-48f4-9f6e-18ff7ce7bf0b"
+              ],
+              "list": "list1"
             }
           ],
           "board": "board1"

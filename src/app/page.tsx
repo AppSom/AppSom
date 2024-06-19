@@ -65,30 +65,23 @@ export default function Home() {
           </Link>
         </div>
       </div>
+      <style jsx>{`
+        .blinking-cursor {
+          font-weight: 100;
+          font-size: 24px;
+          color: black;
+          animation: blink 1s step-end infinite;
+        }
+        
+        @keyframes blink {
+          from, to {
+            color: transparent;
+          }
+          50% {
+            color: black;
+          }
+        }
+      `}</style>
     </div>
-  );
-}
-
-const style = `
-.blinking-cursor {
-  font-weight: 100;
-  font-size: 24px;
-  color: black;
-  animation: blink 1s step-end infinite;
-}
-
-@keyframes blink {
-  from, to {
-    color: transparent;
-  }
-  50% {
-    color: black;
-  }
-}
-`;
-
-export function BlinkingCursorStyles() {
-  return (
-    <style jsx global>{style}</style>
   );
 }

@@ -21,7 +21,7 @@ export default async function RootLayout({
   const session = await getServerSession(authOptions);
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={`${inter.className} text-black`}>
       {/* <ReduxProvider> */}
       <NextAuthProvider session={session}>
       {children}
