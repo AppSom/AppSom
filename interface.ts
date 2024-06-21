@@ -16,6 +16,9 @@ export interface Card {
     color: string,
     member: string[],
     list: string
+    image: string
+    map: string
+    CheckList: string[],
 }
 
 export interface List {
@@ -37,6 +40,12 @@ export interface Board {
     color: string
 }
 
+export interface CheckList {
+    id: string,
+    name: string,
+    show: boolean
+}
+
 export interface BoardJSON {
     data: Board[]
 }
@@ -51,4 +60,4 @@ export interface CardJSON {
 
 export interface UserJSON {
     data: User[]
-}
+} 
