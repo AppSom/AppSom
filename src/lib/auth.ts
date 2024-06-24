@@ -1,6 +1,6 @@
 import { AuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import bcrypt from 'bcrypt';
+const bcrypt = require('bcryptjs');
 import usersData from '../../public/Storage/User/user.json';
 
 export const authOptions: AuthOptions = {

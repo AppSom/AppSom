@@ -16,12 +16,14 @@ const AddCardPopup: React.FC<AddCardPopupProps> = ({ listId, onClose, onSave }) 
     const [description, setDescription] = useState<string>("");
     const [dateStart, setDateStart] = useState<string>("");
     const [dateEnd, setDateEnd] = useState<string>("");
-    const [color, setColor] = useState<string>("#orange");
+    const [color, setColor] = useState<string>("orange");
+    const [image, setImage] = useState<string | null>(null);
+    const [location, setLocation] = useState<string>("");
     const popupRef = useRef<HTMLDivElement>(null);
 
     const handleSave = () => {
         if (!name || !description || !dateStart || !dateEnd) {
-            toast.error('Please fill in all the Card detail', {
+            toast.error('Please fill in all the Card details', {
                 position: "bottom-right",
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -32,8 +34,7 @@ const AddCardPopup: React.FC<AddCardPopupProps> = ({ listId, onClose, onSave }) 
                 theme: "light",
             });
             return;
-        }
-        else if (new Date(dateEnd) < new Date(dateStart)) {
+        } else if (new Date(dateEnd) < new Date(dateStart)) {
             toast.error('Your Date is Wrong', {
                 position: "bottom-right",
                 autoClose: 5000,
@@ -45,8 +46,7 @@ const AddCardPopup: React.FC<AddCardPopupProps> = ({ listId, onClose, onSave }) 
                 theme: "light",
             });
             return;
-        }
-        else{
+        } else {
             toast.success('Add Card Success', {
                 position: "bottom-right",
                 autoClose: 5000,
@@ -68,6 +68,9 @@ const AddCardPopup: React.FC<AddCardPopupProps> = ({ listId, onClose, onSave }) 
             color,
             member: [],
             list: listId,
+            image: image || "",
+            map: location || "",
+            CheckList: []
         };
         onSave(newCard);
         onClose();
@@ -86,9 +89,24 @@ const AddCardPopup: React.FC<AddCardPopupProps> = ({ listId, onClose, onSave }) 
         };
     }, []);
 
+    const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setImage(reader.result as string);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    const convertBase64ToImage = (base64: string) => {
+        return <img src={base64} alt="Uploaded" />;
+    };
+
     return (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-            <div ref={popupRef} className="bg-white p-5 rounded shadow-lg w-96">
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+            <div ref={popupRef} className="bg-white p-5 rounded shadow-lg w-96 relative z-50">
                 <h2 className="text-xl font-bold mb-5 text-center text-black">Add New Card</h2>
                 <input
                     type="text"
@@ -127,6 +145,22 @@ const AddCardPopup: React.FC<AddCardPopupProps> = ({ listId, onClose, onSave }) 
                         />
                     ))}
                 </div>
+                <div className="mb-3">
+                    <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageUpload}
+                        className="w-full mb-3 p-2 border rounded border-gray-500 text-black"
+                    />
+                    {image && convertBase64ToImage(image)}
+                </div>
+                <input
+                    type="text"
+                    placeholder="Location"
+                    value={location}
+                    onChange={(e) => setLocation(e.target.value)}
+                    className="w-full mb-3 p-2 border rounded border-gray-500 text-black"
+                />
                 <div className="flex justify-center space-x-3">
                     <button
                         onClick={handleSave}
@@ -136,6 +170,7 @@ const AddCardPopup: React.FC<AddCardPopupProps> = ({ listId, onClose, onSave }) 
                     </button>
                 </div>
             </div>
+            <ToastContainer />
         </div>
     );
 };

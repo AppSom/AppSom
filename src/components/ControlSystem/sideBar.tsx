@@ -3,22 +3,21 @@ import { useTheme } from './themeSet';
 import Image from 'next/image';
 import convertImgUrl from './convertImgUrl';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faThLarge, faCalendarAlt, faStar, faEllipsisV, faCog } from '@fortawesome/free-solid-svg-icons';
+import { faThLarge, faCalendarAlt, faStar, faEllipsisV, faCog, faPlus } from '@fortawesome/free-solid-svg-icons';
 import Link from 'next/link';
 import { useSession, signOut } from 'next-auth/react';
 import { Board, BoardJSON } from '../../../interface';
 import GetBoards from '@/lib/GetBoards';
-import AddBoardPopup from '../Board/AddBoardPopup';
-import CreateBoard from '@/lib/CreateBoard';
+import GetTemplatePopup from '../Template/GetTemplatePopup';
 
 export default function Sidebar() {
   const { changeTheme } = useTheme();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [boards, setBoards] = useState<Board[]>([]);
-  const [showPopup, setShowPopup] = useState(false);
   const { data: session } = useSession();
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const profileMenuRef = useRef<HTMLDivElement>(null);
+  const [showTemplatePopup, setShowTemplatePopup] = useState(false);
 
   if (!session) {
     return null;
@@ -60,20 +59,6 @@ export default function Sidebar() {
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
-  };
-
-  const handleCreateBoard = async (name: string, description: string) => {
-    const newBoard: Board = {
-        id: crypto.randomUUID(),
-        name,
-        description,
-        lists: [],
-        favorite: [],
-        owner: session.user.id,
-        member: [session.user.id],
-        color: "orange"
-    };
-    await CreateBoard(newBoard);
   };
 
   const profilePicUrl = 'https://drive.google.com/file/d/17ad4RrjEqQmKiwgwA0PmRLoadt1AiigI/view?usp=drive_link';
@@ -140,14 +125,12 @@ export default function Sidebar() {
             <FontAwesomeIcon icon={faStar} className="text-white mr-2 ml-1.5" />
             <a href="/starred" className="text-white">Starred</a>
           </li>
+          <li className="mb-2 flex items-center">
+            <FontAwesomeIcon icon={faThLarge} className="text-white mr-2 ml-1.5" />
+            <button className="text-white" onClick={() => setShowTemplatePopup(showTemplatePopup?false:true)}>Template</button>
+          </li>
           <li className="mb-2 mt-5 flex items-center justify-between">
             <a className="text-white font-bold text-xl">Your Board</a>
-            {/* <button
-            onClick={() => setShowPopup(true)}
-            className="text-white font-bold text-xl bg-transparent border-none cursor-pointer focus:outline-none"
-          >
-            +
-          </button> */}
           </li>
           <div className="max-h-32 overflow-y-auto">
             {
@@ -160,7 +143,6 @@ export default function Sidebar() {
                 ) : ""
             }
           </div>
-
         </ul>
       </div>
 
@@ -194,11 +176,10 @@ export default function Sidebar() {
           </div>
         )}
       </div>
-      {showPopup && (
-        <AddBoardPopup 
-            onClose={() => setShowPopup(false)}
-            onSave={handleCreateBoard}
-        />
+      {showTemplatePopup && (
+          <GetTemplatePopup 
+              onClose={() => setShowTemplatePopup(false)}
+          />
       )}
     </div>
   );

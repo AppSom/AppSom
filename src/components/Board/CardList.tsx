@@ -57,11 +57,6 @@ export default function CardList({ list, onEditCard, onAddCard, permission }: Ca
         handleClosePopup();
     };
 
-    const handleAddCard = () => {
-        onAddCard(list.id);
-        handleClosePopup();
-    };
-
     const handleDelete = () => {
         console.log("Delete card:", selectedCard);
         setDeletePopupVisible(true);

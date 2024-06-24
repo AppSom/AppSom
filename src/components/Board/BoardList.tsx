@@ -30,7 +30,7 @@ export default function BoardList({ starred }: { starred: boolean }) {
             setBoards(filteredBoards);
         };
         LoadBoards();
-    }, [starred, boards, session.user.id]);
+    }, [starred, session.user.id]);
 
     const sortedBoards = [...boards].sort((a, b) => {
         if (sortOrder === "a-z") {
@@ -87,7 +87,7 @@ export default function BoardList({ starred }: { starred: boolean }) {
                 </div>
             </div>
             <div className="flex flex-wrap flex-row justify-start gap-10 p-10">
-                <div className="bg-orange-400 rounded w-[300px] h-[150px] relative">
+                <div className="bg-orange-400 rounded w-[300px] h-[150px] flex items-center justify-center">
                     <button className="w-full h-full p-5" onClick={() => setShowPopup(true)}>
                         <h1 className="text-white font-semibold">Create Board</h1>
                     </button>
@@ -108,7 +108,7 @@ export default function BoardList({ starred }: { starred: boolean }) {
                                 />
                             )}
                             <Link href={`/board/${b.id}`}>
-                                <button className="w-full h-full p-5">
+                                <button className="absolute inset-0 flex items-center justify-center p-5">
                                     <h1 className="text-white font-semibold">{b.name}</h1>
                                 </button>
                             </Link>
@@ -119,10 +119,17 @@ export default function BoardList({ starred }: { starred: boolean }) {
             </div>
 
             {showPopup && (
-                <AddBoardPopup
-                    onClose={() => setShowPopup(false)}
-                    onSave={handleCreateBoard}
-                />
+                <>
+                    <div className="fixed inset-0 bg-black bg-opacity-50 z-40"></div>
+                    <div className="fixed inset-0 flex items-center justify-center z-50">
+                        <div className="relative bg-white p-8 rounded shadow-lg z-50">
+                            <AddBoardPopup
+                                onClose={() => setShowPopup(false)}
+                                onSave={handleCreateBoard}
+                            />
+                        </div>
+                    </div>
+                </>
             )}
         </div>
     );
