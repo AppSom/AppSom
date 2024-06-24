@@ -24,6 +24,7 @@ import { useRouter } from "next/navigation";
 import EditCardPopup from "@/components/Board/EditCardPopup";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import 'leaflet/dist/leaflet.css';
 
 interface BoardIdPageProps {
     params: {
