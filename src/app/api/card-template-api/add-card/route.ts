@@ -11,7 +11,7 @@ export async function POST(req: Request) {
         const cardFileData = fs.readFileSync(cardPath, 'utf-8');
         const cardJson: CardJSON = JSON.parse(cardFileData);
 
-        cardJson.data.push(card);
+        cardJson.data.push(card.data);
 
         fs.writeFileSync(cardPath, JSON.stringify(cardJson, null, 2));
 
