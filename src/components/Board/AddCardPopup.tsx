@@ -138,80 +138,85 @@ const AddCardPopup: React.FC<AddCardPopupProps> = ({ listId, onClose, onSave }) 
 
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-            <div ref={popupRef} className="bg-white p-5 rounded shadow-lg w-96 relative z-50">
+            <div ref={popupRef} className="bg-white p-5 rounded shadow-lg w-100 relative z-50 flex flex-col">
                 <h2 className="text-xl font-bold mb-5 text-center text-black">Add New Card</h2>
-                <input
-                    type="text"
-                    placeholder="Card Name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    className="w-full mb-3 p-2 border rounded border-gray-500 text-black"
-                />
-                <textarea
-                    placeholder="Card Description"
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                    className="w-full mb-3 p-2 border rounded border-gray-500 text-black"
-                />
-                <div className="flex justify-between mb-3">
-                    <input
-                        type="date"
-                        value={dateStart}
-                        onChange={(e) => setDateStart(e.target.value)}
-                        className="w-1/2 mr-1 p-2 border rounded border-gray-500 text-black"
-                    />
-                    <input
-                        type="date"
-                        value={dateEnd}
-                        onChange={(e) => setDateEnd(e.target.value)}
-                        className="w-1/2 ml-1 p-2 border rounded border-gray-500 text-black"
-                    />
-                </div>
-                <div className="flex justify-center space-x-2 mb-3">
-                    {['orange', 'green', 'blue', 'purple', 'gray'].map((clr) => (
-                        <button
-                            key={clr}
-                            onClick={() => setColor(clr)}
-                            className={`w-10 h-10 rounded-full ${clr === color ? 'border-2 border-black' : ''}`}
-                            style={{ backgroundColor: clr }}
-                        />
-                    ))}
-                </div>
-                <div className="mb-3">
-                    <input
-                        type="file"
-                        accept="image/*"
-                        onChange={handleImageUpload}
-                        className="w-full mb-3 p-2 border rounded border-gray-500 text-black"
-                    />
-                    {image && convertBase64ToImage(image)}
-                </div>
-                <div>
-                    <label htmlFor="hasMap">Map Included? </label>
-                    <input id="hasMap" type="checkbox" checked={hasMap} onChange={() => setMap(!hasMap)}/>
-                </div>
-                {
-                    hasMap ? 
+                <div className="flex flex-row gap-5">
                     <div>
-                        <MapContainer className="w-full h-64" center={[position[0], position[1]]} zoom={16}>
-                            <ClickableMarker />
-                            <TileLayer
-                                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                            />
-                        </MapContainer>  
                         <input
                             type="text"
-                            placeholder="Location"
-                            value={`${position[0]},${position[1]}`}
-                            disabled
+                            placeholder="Card Name"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
                             className="w-full mb-3 p-2 border rounded border-gray-500 text-black"
                         />
+                        <textarea
+                            placeholder="Card Description"
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
+                            className="w-full mb-3 p-2 border rounded border-gray-500 text-black"
+                        />
+                        <div className="flex justify-between mb-3">
+                            <input
+                                type="date"
+                                value={dateStart}
+                                onChange={(e) => setDateStart(e.target.value)}
+                                className="w-1/2 mr-1 p-2 border rounded border-gray-500 text-black"
+                            />
+                            <input
+                                type="date"
+                                value={dateEnd}
+                                onChange={(e) => setDateEnd(e.target.value)}
+                                className="w-1/2 ml-1 p-2 border rounded border-gray-500 text-black"
+                            />
+                        </div>
+                        <div className="flex justify-center space-x-2 mb-3">
+                            {['orange', 'green', 'blue', 'purple', 'gray'].map((clr) => (
+                                <button
+                                    key={clr}
+                                    onClick={() => setColor(clr)}
+                                    className={`w-10 h-10 rounded-full ${clr === color ? 'border-2 border-black' : ''}`}
+                                    style={{ backgroundColor: clr }}
+                                />
+                            ))}
+                        </div>
                     </div>
-                    
-                    : null
-                }
-                
+                    <div>
+                        <div className="mb-3">
+                            <input
+                                type="file"
+                                accept="image/*"
+                                onChange={handleImageUpload}
+                                className="w-full mb-3 p-2 border rounded border-gray-500 text-black"
+                            />
+                            {image && convertBase64ToImage(image)}
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="hasMap">Map Included? </label>
+                            <input id="hasMap" type="checkbox" checked={hasMap} onChange={() => setMap(!hasMap)}/>
+                        </div>
+                        {
+                            hasMap ? 
+                            <div>
+                                <MapContainer className="w-full h-64 mb-3" center={[position[0], position[1]]} zoom={16}>
+                                    <ClickableMarker />
+                                    <TileLayer
+                                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                    />
+                                </MapContainer>  
+                                <input
+                                    type="text"
+                                    placeholder="Location"
+                                    value={`${position[0]},${position[1]}`}
+                                    disabled
+                                    className="w-full mb-3 p-2 border rounded border-gray-500 text-black"
+                                />
+                            </div>
+                            : null
+                        }
+                    </div>
+                </div>
+
                 <div className="flex justify-center space-x-3">
                     <button
                         onClick={handleSave}

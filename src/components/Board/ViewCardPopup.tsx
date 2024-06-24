@@ -81,37 +81,48 @@ const ViewCardPopup: React.FC<ViewCardPopupProps> = ({ onClose, cid, lid }) => {
 
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-            <div ref={popupRef} className="bg-white p-5 rounded shadow-lg w-96 relative">
+            <div ref={popupRef} className="bg-white p-5 rounded shadow-lg w-auto relative">
                 <div className="flex flex-row justify-between items-center mb-3">
-                    <div className="font-bold text-3xl">{card.name}</div>
-                    <div
-                        className="w-28 h-8 rounded-3xl"
-                        style={{ backgroundColor: card.color }}
-                    ></div>
+                        <div className="font-bold text-3xl">{card.name}</div>
+                        <div className="w-40 h-8 rounded-3xl" style={{ backgroundColor: card.color }}></div>
                 </div>
-                <div className="mb-3 text-xl">{card.description}</div>
-                <div className="mb-3">
-                    <strong>Date :</strong> {new Date(card.date_start).toLocaleDateString()} - {new Date(card.date_end).toLocaleDateString()}
-                </div>
-                <div className="mb-3">
-                    {card.image && convertBase64ToImage(card.image)}
-                </div>
-                <div className='mb-3 font-bold text-center'>Location</div>
-                {
-                    latitude && longitude ? 
-                    <MapContainer className="w-full h-64" center={[latitude, longitude]} zoom={16}>
-                    <TileLayer
-                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                    />
-                    <Marker position={[latitude, longitude]}></Marker>
-                    </MapContainer> 
-                    : 
-                    <div className='text-center'>
-                        * No map available *
+                <div className='flex flex-row gap-5'>
+                    <div>
+                        <div className="mb-3 text-xl">{card.description}</div>
+                        <div className="mb-3">
+                            <strong>Date :</strong> {new Date(card.date_start).toLocaleDateString()} - {new Date(card.date_end).toLocaleDateString()}
+                        </div>
+                        <div className='mb-3 font-bold'>Members</div>
+                        <ul className="mb-3">
+                            {members.map(member => (
+                                <li key={member.id} className="flex items-center mb-2">
+                                    <img src={member.image} alt={member.name} className="w-8 h-8 rounded-full mr-2" />
+                                    <div className='text-xl'>{member.name}</div>
+                                </li>
+                            ))}
+                        </ul>
+                        <div className="mb-3">
+                            {card.image && convertBase64ToImage(card.image)}
                     </div>
-                }
-                
+                </div>
+                <div>
+                    <div className='mb-3 font-bold text-center'>Location</div>
+                    {
+                        latitude && longitude ? 
+                        <MapContainer className="w-[25vw] h-64 mb-3" center={[latitude, longitude]} zoom={16}>
+                        <TileLayer
+                            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                        />
+                        <Marker position={[latitude, longitude]}></Marker>
+                        </MapContainer> 
+                        : 
+                        <div className='text-center'>
+                            * No map available *
+                        </div>
+                    }
+                    </div>
+                </div>
             </div>
         </div>
     );

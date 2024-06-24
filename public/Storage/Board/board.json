@@ -120,7 +120,9 @@
               "date_start": "2024-06-25",
               "date_end": "2024-06-26",
               "color": "gray",
-              "member": [],
+              "member": [
+                "3a99518f-08ef-45e7-bb4d-6e9d3ce9f4a0"
+              ],
               "list": "f8111c48-7ae3-4625-87a9-f813c6cb9ca6",
               "image": "/uploads/eaf63a4f-19a6-40e7-b87a-bb2f702a5cb3_ProfilePic.png",
               "map": "13.746597,100.539360",
