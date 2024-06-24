@@ -17,7 +17,7 @@ const AddCardPopup: React.FC<AddCardPopupProps> = ({ listId, onClose, onSave }) 
     const [dateStart, setDateStart] = useState<string>("");
     const [dateEnd, setDateEnd] = useState<string>("");
     const [color, setColor] = useState<string>("orange");
-    const [image, setImage] = useState<string | null>(null);
+    const [image, setImage] = useState<string>("");
     const [location, setLocation] = useState<string>("");
     const popupRef = useRef<HTMLDivElement>(null);
 

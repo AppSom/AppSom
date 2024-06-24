@@ -6,7 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 interface EditCardPopupProps {
     card: Card;
     onClose: () => void;
-    onSave: (name: string, description: string, dateStart: string, dateEnd: string, color: string) => void;
+    onSave: (name: string, description: string, dateStart: string, dateEnd: string, color: string, image: string, location: string) => void;
 }
 
 const EditCardPopup: React.FC<EditCardPopupProps> = ({ card, onClose, onSave }) => {
@@ -15,6 +15,8 @@ const EditCardPopup: React.FC<EditCardPopupProps> = ({ card, onClose, onSave }) 
     const [dateStart, setDateStart] = useState<string>(card.date_start);
     const [dateEnd, setDateEnd] = useState<string>(card.date_end);
     const [color, setColor] = useState<string>(card.color);
+    const [image, setImage] = useState<string>(card.image);
+    const [location, setLocation] = useState<string>(card.map);
     const popupRef = useRef<HTMLDivElement>(null);
 
     const handleSave = () => {
@@ -56,7 +58,7 @@ const EditCardPopup: React.FC<EditCardPopupProps> = ({ card, onClose, onSave }) 
                 theme: "light",
             });
         }
-        onSave( name, description, dateStart, dateEnd, color );
+        onSave( name, description, dateStart, dateEnd, color, image, location );
         onClose();
     };
 
@@ -72,6 +74,21 @@ const EditCardPopup: React.FC<EditCardPopupProps> = ({ card, onClose, onSave }) 
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, []);
+
+    const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setImage(reader.result as string);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    const convertBase64ToImage = (base64: string) => {
+        return <img src={base64} alt="Uploaded" />;
+    };
 
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
@@ -115,6 +132,22 @@ const EditCardPopup: React.FC<EditCardPopupProps> = ({ card, onClose, onSave }) 
                         />
                     ))}
                 </div>
+                <div className="mb-3">
+                    <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageUpload}
+                        className="w-full mb-3 p-2 border rounded border-gray-500 text-black"
+                    />
+                    {image && convertBase64ToImage(image)}
+                </div>
+                <input
+                    type="text"
+                    placeholder="Location"
+                    value={location}
+                    onChange={(e) => setLocation(e.target.value)}
+                    className="w-full mb-3 p-2 border rounded border-gray-500 text-black"
+                />
                 <div className="flex justify-center space-x-3">
                     <button
                         onClick={handleSave}

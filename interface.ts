@@ -16,7 +16,7 @@ export interface Card {
     color: string,
     member: string[],
     list: string
-    image: string
+    image: string;
     map: string
     CheckList: string[],
 }

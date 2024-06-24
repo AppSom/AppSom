@@ -26,6 +26,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import UpdateCardById from "@/lib/UpdateCardById";
 import GetListById from "@/lib/GetListById";
+import 'leaflet/dist/leaflet.css';
 
 interface BoardIdPageProps {
     params: {
@@ -211,7 +212,7 @@ const BoardIdPage: React.FC<BoardIdPageProps> = ({ params }) => {
         console.log(card);
     };
 
-    const handleSaveEditCard = async (name: string, description: string, dateStart: string, dateEnd: string, color: string) => {
+    const handleSaveEditCard = async (name: string, description: string, dateStart: string, dateEnd: string, color: string, image: string, location: string) => {
         if (!CheckOwner(board.owner, session.user.id)) {
             return;
         }
@@ -227,8 +228,8 @@ const BoardIdPage: React.FC<BoardIdPageProps> = ({ params }) => {
             color: color,
             member: selectedCard.member,
             list: selectedCard.list,
-            image: selectedCard.image,
-            map: selectedCard.map,
+            image: image,
+            map: location,
             CheckList: selectedCard.CheckList
         }
         await UpdateCardById(updatedCard, selectedCard.id, selectedCard.list, params.bid);
@@ -275,7 +276,7 @@ const BoardIdPage: React.FC<BoardIdPageProps> = ({ params }) => {
     }
 
     return (
-        <main className="flex flex-col bg-somon min-h-screen ml-64">
+        <main className="flex flex-col flex-wrap bg-somon min-h-screen ml-64 overflow-auto">
             {
                 board.member.includes(session.user.id) ?
 
