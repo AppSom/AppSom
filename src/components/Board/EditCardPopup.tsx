@@ -2,6 +2,10 @@ import { useState, useRef, useEffect } from 'react';
 import { Card } from '../../../interface';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
+import 'leaflet-defaulticon-compatibility';
+import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css';
 
 interface EditCardPopupProps {
     card: Card;
@@ -17,6 +21,9 @@ const EditCardPopup: React.FC<EditCardPopupProps> = ({ card, onClose, onSave }) 
     const [color, setColor] = useState<string>(card.color);
     const [image, setImage] = useState<string>(card.image);
     const [location, setLocation] = useState<string>(card.map);
+    const lat = parseFloat(location.split(',')[0]);
+    const lon = parseFloat(location.split(',')[1]);
+    const [position, setPosition] = useState([lat, lon]);
     const popupRef = useRef<HTMLDivElement>(null);
 
     const handleSave = () => {
@@ -90,6 +97,22 @@ const EditCardPopup: React.FC<EditCardPopupProps> = ({ card, onClose, onSave }) 
         return <img src={base64} alt="Uploaded" />;
     };
 
+    const ClickableMarker = () => {
+        const map = useMapEvents({
+            click(e) {
+                setPosition([e.latlng.lat, e.latlng.lng]);
+                setLocation(`${e.latlng.lat},${e.latlng.lng}`)
+            }
+        })
+
+        return (
+            
+            position ? 
+            <Marker position={[position[0], position[1]]}/>
+            : null
+        )
+    }
+
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
             <div ref={popupRef} className="bg-white p-5 rounded shadow-lg w-96">
@@ -141,13 +164,26 @@ const EditCardPopup: React.FC<EditCardPopupProps> = ({ card, onClose, onSave }) 
                     />
                     {image && convertBase64ToImage(image)}
                 </div>
-                <input
-                    type="text"
-                    placeholder="Location"
-                    value={location}
-                    onChange={(e) => setLocation(e.target.value)}
-                    className="w-full mb-3 p-2 border rounded border-gray-500 text-black"
-                />
+                {
+                    location === "" ? null : 
+                    <div>
+                        <MapContainer className="w-full h-64" center={[position[0], position[1]]} zoom={16}>
+                            <ClickableMarker />
+                            <TileLayer
+                                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                            />
+                        </MapContainer>  
+                        <input
+                            type="text"
+                            placeholder="Location"
+                            value={`${position[0]},${position[1]}`}
+                            disabled
+                            className="w-full mb-3 p-2 border rounded border-gray-500 text-black"
+                        />
+                    </div>
+                }
+
                 <div className="flex justify-center space-x-3">
                     <button
                         onClick={handleSave}

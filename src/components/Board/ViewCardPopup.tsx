@@ -98,7 +98,8 @@ const ViewCardPopup: React.FC<ViewCardPopupProps> = ({ onClose, cid, lid }) => {
                 </div>
                 <div className='mb-3 font-bold text-center'>Location</div>
                 {
-                    latitude && longitude ? <MapContainer className="w-full h-64" center={[latitude, longitude]} zoom={16}>
+                    latitude && longitude ? 
+                    <MapContainer className="w-full h-64" center={[latitude, longitude]} zoom={16}>
                     <TileLayer
                         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
