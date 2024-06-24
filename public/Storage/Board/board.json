@@ -169,26 +169,6 @@
           "description": "To-Do List",
           "cards": [
             {
-              "id": "b5557ab1-301a-4e5d-bbee-62e35baa2d5e",
-              "name": "card",
-              "description": "cArd",
-              "date_start": "2024-06-22",
-              "date_end": "2024-06-26",
-              "color": "green",
-              "member": [],
-              "list": "06001bc9-1af9-49d4-9451-3ab87567b98a"
-            },
-            {
-              "id": "5261e12a-6a76-4fb1-91e8-15ab519b2728",
-              "name": "h",
-              "description": "h",
-              "date_start": "2024-06-23",
-              "date_end": "2024-06-26",
-              "color": "green",
-              "member": [],
-              "list": "56cd88a5-6f92-4a67-8efe-ecad5d689a6d"
-            },
-            {
               "id": "891aa57d-6057-4e12-807a-c6a095df4625",
               "name": "qwerty",
               "description": "haha",
@@ -205,89 +185,35 @@
           "board": "7668d1c9-5228-438a-b37c-399636d626d0"
         },
         {
-          "id": "06001bc9-1af9-49d4-9451-3ab87567b98a",
-          "name": "In Progress",
-          "description": "Doing List",
-          "cards": [
-            {
-              "id": "e250b445-ad20-45b6-847c-8f92a40454ba",
-              "name": "car",
-              "description": "dcad",
-              "date_start": "2024-06-22",
-              "date_end": "2024-06-27",
-              "color": "blue",
-              "member": [],
-              "list": "de4bd8d8-0616-47ba-9257-f2cb95ad4b62"
-            },
-            {
-              "id": "57ba60fa-bde0-4b2e-9caa-fd5f1b91360b",
-              "name": "DDD2",
-              "description": "DDD2",
-              "date_start": "2024-06-23",
-              "date_end": "2024-06-26",
-              "color": "blue",
-              "member": [],
-              "list": "56cd88a5-6f92-4a67-8efe-ecad5d689a6d"
-            },
-            {
-              "id": "6def57c8-3e56-4d13-ae82-de30e74f4b52",
-              "name": "F",
-              "description": "F",
-              "date_start": "2024-06-23",
-              "date_end": "2024-06-26",
-              "color": "gray",
-              "member": [],
-              "list": "56cd88a5-6f92-4a67-8efe-ecad5d689a6d"
-            },
-            {
-              "id": "a4317156-720f-4a00-996c-67791e62f2b7",
-              "name": "ddd",
-              "description": "ddd",
-              "date_start": "2024-06-22",
-              "date_end": "2024-07-02",
-              "color": "gray",
-              "member": [],
-              "list": "de4bd8d8-0616-47ba-9257-f2cb95ad4b62"
-            },
-            {
-              "id": "faa566cd-4612-4efa-9a1f-d8fcd8c77412",
-              "name": "DDD",
-              "description": "DDD",
-              "date_start": "2024-06-28",
-              "date_end": "2024-06-29",
-              "color": "orange",
-              "member": [
-                "75c8ba78-d371-4ff6-be29-1139cfebf33c"
-              ],
-              "list": "56cd88a5-6f92-4a67-8efe-ecad5d689a6d"
-            },
-            {
-              "id": "c2da60f3-5b5c-441e-bd97-ed19fa304657",
-              "name": "dd",
-              "description": "dd",
-              "date_start": "2024-06-22",
-              "date_end": "2024-06-25",
-              "color": "orange",
-              "member": [],
-              "list": "de4bd8d8-0616-47ba-9257-f2cb95ad4b62"
-            }
-          ],
-          "board": "7668d1c9-5228-438a-b37c-399636d626d0"
-        },
-        {
           "id": "de4bd8d8-0616-47ba-9257-f2cb95ad4b62",
           "name": "Done",
           "description": "Done List",
           "cards": [
             {
-              "id": "d72e8d1b-817a-48f8-a60d-db0d8b8d9edb",
-              "name": "gg",
-              "description": "gg",
-              "date_start": "2024-06-22",
-              "date_end": "2024-06-23",
+              "id": "abad02b2-4190-4f89-a2fa-dc39c6049c79",
+              "name": "FF",
+              "description": "ff",
+              "date_start": "2024-05-27",
+              "date_end": "2024-06-28",
+              "color": "green",
+              "member": [],
+              "list": "de4bd8d8-0616-47ba-9257-f2cb95ad4b62",
+              "image": "",
+              "map": "",
+              "CheckList": []
+            },
+            {
+              "id": "d89df295-f5bc-4203-a61c-b81c5adcbf3f",
+              "name": "Card New",
+              "description": "new",
+              "date_start": "2024-06-13",
+              "date_end": "2024-06-27",
               "color": "purple",
               "member": [],
-              "list": "06001bc9-1af9-49d4-9451-3ab87567b98a"
+              "list": "de4bd8d8-0616-47ba-9257-f2cb95ad4b62",
+              "image": "",
+              "map": "",
+              "CheckList": []
             }
           ],
           "board": "7668d1c9-5228-438a-b37c-399636d626d0"

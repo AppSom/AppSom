@@ -24,6 +24,8 @@ import { useRouter } from "next/navigation";
 import EditCardPopup from "@/components/Board/EditCardPopup";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import UpdateCardById from "@/lib/UpdateCardById";
+import GetListById from "@/lib/GetListById";
 
 interface BoardIdPageProps {
     params: {
@@ -186,25 +188,17 @@ const BoardIdPage: React.FC<BoardIdPageProps> = ({ params }) => {
         setShowAddCardPopup(true);
     };
 
-    const handleSaveCard = (newCard: Card) => {
+    const handleSaveCard = async (newCard: Card) => {
         if (!CheckOwner(board.owner, session.user.id)) {
             return;
         }
-        const updatedLists = lists.map((list) => {
-            if (list.id === newCard.list) {
-                return { ...list, cards: [...list.cards, newCard] };
-            }
-            return list;
-        });
-
-        setLists(updatedLists);
-
-        const updatedBoard = { ...board, lists: updatedLists };
+        await CreateCard(newCard, newCard.list, board.id);
+        const updatedBoard = await GetBoardById(params.bid);
+        if (!updatedBoard) {
+            return;
+        }
+        setLists(updatedBoard.lists);
         setBoard(updatedBoard);
-
-        CreateCard(newCard, newCard.list, board.id);
-        UpdateBoardById(board.id, updatedBoard);
-
         setShowAddCardPopup(false);
     };
 
@@ -214,24 +208,35 @@ const BoardIdPage: React.FC<BoardIdPageProps> = ({ params }) => {
         }
         setSelectedCard(card);
         setShowEditCardPopup(true);
+        console.log(card);
     };
 
-    const handleSaveEditCard = (updatedCard: Card) => {
+    const handleSaveEditCard = async (name: string, description: string, dateStart: string, dateEnd: string, color: string) => {
         if (!CheckOwner(board.owner, session.user.id)) {
             return;
         }
-        const updatedLists = lists.map((list) => {
-            if (list.id === updatedCard.list) {
-                const updatedCards = list.cards.map((card) =>
-                    card.id === updatedCard.id ? updatedCard : card
-                );
-                return { ...list, cards: updatedCards };
-            }
-            return list;
-        });
-
-        setLists(updatedLists);
-        const updatedBoard = { ...board, lists: updatedLists };
+        if (!selectedCard) {
+            return;
+        }
+        const updatedCard: Card = {
+            id: selectedCard.id,
+            name: name,
+            description: description,
+            date_start: dateStart,
+            date_end: dateEnd,
+            color: color,
+            member: selectedCard.member,
+            list: selectedCard.list,
+            image: selectedCard.image,
+            map: selectedCard.map,
+            CheckList: selectedCard.CheckList
+        }
+        await UpdateCardById(updatedCard, selectedCard.id, selectedCard.list, params.bid);
+        const updatedBoard = await GetBoardById(params.bid);
+        if (!updatedBoard) {
+            return;
+        }
+        setLists(updatedBoard.lists);
         setBoard(updatedBoard);
         setShowEditCardPopup(false);
     };
@@ -253,10 +258,12 @@ const BoardIdPage: React.FC<BoardIdPageProps> = ({ params }) => {
 
         try {
             await DeleteListById(listId, board.id);
-            const updatedLists = lists.filter(list => list.id !== listId);
-            const updatedBoard = { ...board, lists: updatedLists };
+            const updatedBoard = await GetBoardById(params.bid);
+            if (!updatedBoard) {
+                return;
+            }
+            setLists(updatedBoard.lists);
             setBoard(updatedBoard);
-            setLists(updatedLists);
             setShowDeleteListPopup(false);
         } catch (error) {
             console.error("Failed to delete list:", error);

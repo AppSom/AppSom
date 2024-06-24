@@ -6,7 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 interface EditCardPopupProps {
     card: Card;
     onClose: () => void;
-    onSave: (card: Card) => void;
+    onSave: (name: string, description: string, dateStart: string, dateEnd: string, color: string) => void;
 }
 
 const EditCardPopup: React.FC<EditCardPopupProps> = ({ card, onClose, onSave }) => {
@@ -56,7 +56,7 @@ const EditCardPopup: React.FC<EditCardPopupProps> = ({ card, onClose, onSave }) 
                 theme: "light",
             });
         }
-        onSave({ ...card, name, description, date_start: dateStart, date_end: dateEnd, color });
+        onSave( name, description, dateStart, dateEnd, color );
         onClose();
     };
 
