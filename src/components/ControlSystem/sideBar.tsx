@@ -65,7 +65,7 @@ export default function Sidebar() {
   const logoUrl = "https://drive.google.com/file/d/1xNsGNsI9bwcRYSnb5hKCAiHwK0wrkuYD/view?usp=drive_link";
 
   return (
-    <div className="fixed left-0 top-0 h-full w-64 bg-som text-white flex flex-col justify-between p-4 font-sans font-bold tracking-wider">
+    <div className="fixed left-0 top-0 h-full w-64 bg-som text-white flex flex-col justify-between p-4 font-sans font-bold tracking-wider z-50">
       <div>
         <div className="flex justify-center mt-2 mb-4">
           <Link href="/">

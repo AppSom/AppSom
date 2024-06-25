@@ -75,9 +75,13 @@ const ViewCardPopup: React.FC<ViewCardPopupProps> = ({ onClose, cid, lid }) => {
         return <img src={base64} alt="Uploaded" />;
     };
 
-    let coordinates = card.map.split(',');
-    let latitude = Number(coordinates[0]);
-    let longitude = Number(coordinates[1]);
+    let coordinates, latitude, longitude;
+    if (card.map != "" && card.map) {
+        coordinates = card.map.split(',');
+        latitude = Number(coordinates[0]);
+        longitude = Number(coordinates[1]); 
+    }
+    
 
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">

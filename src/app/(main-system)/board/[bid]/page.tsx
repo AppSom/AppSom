@@ -276,7 +276,7 @@ const BoardIdPage: React.FC<BoardIdPageProps> = ({ params }) => {
     }
 
     return (
-        <main className="flex flex-col flex-wrap bg-somon min-h-screen ml-64 overflow-auto">
+        <div className="flex flex-col flex-wrap bg-somon min-h-screen ml-64 overflow-auto">
             {
                 board.member.includes(session.user.id) ?
 
@@ -399,7 +399,7 @@ const BoardIdPage: React.FC<BoardIdPageProps> = ({ params }) => {
             : null
         }
         <ToastContainer />
-        </main>
+        </div>
     );
 };
 

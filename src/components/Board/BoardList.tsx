@@ -94,7 +94,7 @@ export default function BoardList({ starred }: { starred: boolean }) {
                 </div>
                 {filteredBoards.length > 0 ?
                     filteredBoards.map((b) =>
-                        <div key={b.id} className={`rounded w-[300px] h-[150px] relative`} style={{ backgroundColor: b.color }}>
+                        <div key={b.id} className={`rounded w-[300px] h-[150px] relative z-0`} style={{ backgroundColor: b.color }}>
                             {Array.isArray(b.favorite) && b.favorite.includes(session.user.id) && (
                                 <FontAwesomeIcon
                                     icon={faStar}
