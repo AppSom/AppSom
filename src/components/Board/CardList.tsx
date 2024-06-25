@@ -81,6 +81,10 @@ export default function CardList({ list, onEditCard, onAddCard, permission }: Ca
         setMemberPopupVisible(false);
     };
 
+    const handleCardUpdate = (updatedCard: Card) => {
+        setCards(prevCards => prevCards.map(card => card.id === updatedCard.id ? updatedCard : card));
+    };
+
     return (
         <Droppable droppableId={list.id} type="card">
             {(provided) => (
@@ -128,28 +132,29 @@ export default function CardList({ list, onEditCard, onAddCard, permission }: Ca
                     )}
                     {viewPopupVisible && selectedCard && (
                         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-15">
-                        <ViewCardPopup
-                            onClose={handleCloseViewPopup}
-                            cid={selectedCard.id}
-                            lid={selectedCard.list}
-                        />
+                            <ViewCardPopup
+                                onClose={handleCloseViewPopup}
+                                cid={selectedCard.id}
+                                lid={selectedCard.list}
+                                updateCard={handleCardUpdate} // Pass the updateCard function
+                            />
                         </div>
                     )}
                     {deletePopupVisible && selectedCard && (
                         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-15">
-                        <DeleteCardPopup
-                            onClose={() => setDeletePopupVisible(false)}
-                            onDelete={onDeleteHandler}
-                        />
+                            <DeleteCardPopup
+                                onClose={() => setDeletePopupVisible(false)}
+                                onDelete={onDeleteHandler}
+                            />
                         </div>
                     )}
                     {memberPopupVisible && selectedCard && (
                         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-15">
-                        <CardMemberPopup
-                            cid={selectedCard.id}
-                            lid={selectedCard.list}
-                            onClose={handleCloseMemberPopup}
-                        />
+                            <CardMemberPopup
+                                cid={selectedCard.id}
+                                lid={selectedCard.list}
+                                onClose={handleCloseMemberPopup}
+                            />
                         </div>
                     )}
                 </div>
