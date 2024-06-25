@@ -15,15 +15,15 @@ const writeCards = (data: CardJSON) => {
 
 export async function PUT(req: Request) {
     try {
-        const updatedCard = await req.json();
+        const card = await req.json();
         const cardJson = readCards();
 
-        const cardIndex = cardJson.data.findIndex(card => card.id === updatedCard.id);
+        const cardIndex = cardJson.data.findIndex(card => card.id === card.id);
         if (cardIndex === -1) {
             return NextResponse.json({ message: 'Card not found' }, { status: 404 });
         }
 
-        cardJson.data[cardIndex] = updatedCard;
+        cardJson.data[cardIndex] = card.data;
         writeCards(cardJson);
 
         return NextResponse.json({ message: 'Card updated successfully' });

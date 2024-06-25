@@ -15,10 +15,10 @@ const writeCards = (data: CardJSON) => {
 
 export async function DELETE(req: Request) {
     try {
-        const { id } = await req.json();
+        const { cid } = await req.json();
         const cardJson = readCards();
 
-        const cardIndex = cardJson.data.findIndex(card => card.id === id);
+        const cardIndex = cardJson.data.findIndex(card => card.id === cid);
         if (cardIndex === -1) {
             return NextResponse.json({ message: 'Card not found' }, { status: 404 });
         }

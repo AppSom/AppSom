@@ -6,7 +6,11 @@ import { faEdit, faTrash, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import AddTemplatePopup from './AddTemplatePopup';
+import EditTemplatePopup from './EditTemplatePopup';
+import DeleteTemplatePopup from './DeleteTemplatePopup';
 import CreateCard from '@/lib/Card-template/createCard';
+import DeleteCardById from '@/lib/Card-template/deleteCard';
+import UpdateCardById from '@/lib/Card-template/editCard';
 
 interface GetTemplatePopupProps {
     onClose: () => void;
@@ -17,6 +21,10 @@ const GetTemplatePopup: React.FC<GetTemplatePopupProps> = ({ onClose }) => {
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [searchResults, setSearchResults] = useState<Card[]>([]);
     const [showAddTemplatePopup, setShowAddTemplatePopup] = useState<boolean>(false);
+    const [showEditTemplatePopup, setShowEditTemplatePopup] = useState<boolean>(false);
+    const [showDeleteTemplatePopup, setShowDeleteTemplatePopup] = useState<boolean>(false);
+    const [templateToEdit, setTemplateToEdit] = useState<Card | null>(null);
+    const [templateToDelete, setTemplateToDelete] = useState<Card | null>(null);
     const popupRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -50,8 +58,8 @@ const GetTemplatePopup: React.FC<GetTemplatePopupProps> = ({ onClose }) => {
 
     const handleAddTemplate = async (newTemplate: Card) => {
         await CreateCard(newTemplate);
-        const updateTemplate = await GetTemplateCard();
-        setTemplates(updateTemplate)
+        const updatedTemplates = await GetTemplateCard();
+        setTemplates(updatedTemplates);
         toast.success('Template Added Successfully', {
             position: "bottom-right",
             autoClose: 5000,
@@ -65,7 +73,17 @@ const GetTemplatePopup: React.FC<GetTemplatePopupProps> = ({ onClose }) => {
     };
 
     const handleEditTemplate = (template: Card) => {
-        toast.info('Edit Template', {
+        setTemplateToEdit(template);
+        setShowEditTemplatePopup(true);
+    };
+
+    const handleSaveEditTemplate = async (updatedCard: Card) => {
+        const updatedTemplates = templates.map((template) =>
+            template.id === updatedCard.id ? updatedCard : template
+        );
+        await UpdateCardById(updatedCard)
+        setTemplates(updatedTemplates);
+        toast.success('Template Updated Successfully', {
             position: "bottom-right",
             autoClose: 5000,
             hideProgressBar: false,
@@ -75,28 +93,43 @@ const GetTemplatePopup: React.FC<GetTemplatePopupProps> = ({ onClose }) => {
             progress: undefined,
             theme: "light",
         });
-        // Add your edit template logic here
-        console.log("Edit template button clicked", template);
     };
 
     const handleDeleteTemplate = (template: Card) => {
-        toast.error('Template Deleted Successfully', {
-            position: "bottom-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-        });
-        // Add your delete template logic here
-        console.log("Delete template button clicked", template);
+        setTemplateToDelete(template);
+        setShowDeleteTemplatePopup(true);
+    };
+
+    const confirmDeleteTemplate = async () => {
+        if (templateToDelete) {
+            await DeleteCardById(templateToDelete.id);
+            const updatedTemplates = templates.filter(template => template.id !== templateToDelete.id);
+            setTemplates(updatedTemplates);
+            setShowDeleteTemplatePopup(false);
+            toast.error('Template Deleted Successfully', {
+                position: "bottom-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+            });
+        }
     };
 
     const handleCloseAddTemplate = () => {
-        setShowAddTemplatePopup(false)
-    }
+        setShowAddTemplatePopup(false);
+    };
+
+    const handleCloseEditTemplate = () => {
+        setShowEditTemplatePopup(false);
+    };
+
+    const handleCloseDeleteTemplate = () => {
+        setShowDeleteTemplatePopup(false);
+    };
 
     const displayedTemplates = searchTerm ? searchResults : templates;
 
@@ -128,7 +161,7 @@ const GetTemplatePopup: React.FC<GetTemplatePopupProps> = ({ onClose }) => {
                     ))}
                 </div>
                 <div className="flex justify-between items-center">
-                <button onClick={() => setShowAddTemplatePopup(true)} className="bg-green-500 text-white p-2 rounded flex items-center">
+                    <button onClick={() => setShowAddTemplatePopup(true)} className="bg-green-500 text-white p-2 rounded flex items-center">
                         <FontAwesomeIcon icon={faPlus} className="mr-2" />
                         Add Template
                     </button>
@@ -137,13 +170,30 @@ const GetTemplatePopup: React.FC<GetTemplatePopupProps> = ({ onClose }) => {
                     </button>
                 </div>
                 {showAddTemplatePopup && (
-                        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-15">
+                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-15">
                         <AddTemplatePopup
                             onClose={handleCloseAddTemplate}
                             onSave={handleAddTemplate}
                         />
-                        </div>
-                    )}
+                    </div>
+                )}
+                {showEditTemplatePopup && templateToEdit && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-15">
+                        <EditTemplatePopup
+                            card={templateToEdit}
+                            onClose={handleCloseEditTemplate}
+                            onSave={handleSaveEditTemplate}
+                        />
+                    </div>
+                )}
+                {showDeleteTemplatePopup && templateToDelete && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-15">
+                        <DeleteTemplatePopup
+                            onClose={handleCloseDeleteTemplate}
+                            onDelete={confirmDeleteTemplate}
+                        />
+                    </div>
+                )}
             </div>
             <ToastContainer />
         </div>

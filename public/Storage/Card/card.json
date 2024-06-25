@@ -1,22 +1,9 @@
 {
   "data": [
     {
-      "id": "1",
+      "id": "2",
       "name": "Card 1",
       "description": "This is the first card",
-      "date_start": "2024-01-01",
-      "date_end": "2024-01-07",
-      "color": "#FF5733",
-      "member": [],
-      "list": "",
-      "image": "",
-      "map": "",
-      "CheckList": []
-    },
-    {
-      "id": "2",
-      "name": "Card 2",
-      "description": "This is the second card",
       "date_start": "2024-01-05",
       "date_end": "2024-01-10",
       "color": "#33FF57",
@@ -59,19 +46,6 @@
       "date_start": "2024-01-20",
       "date_end": "2024-01-25",
       "color": "#A133FF",
-      "member": [],
-      "list": "",
-      "image": "",
-      "map": "",
-      "CheckList": []
-    },
-    {
-      "id": "7970a6a9-19d5-4e15-ad81-357222308dc8",
-      "name": "Card 6",
-      "description": "This is card 6",
-      "date_start": "2024-06-25",
-      "date_end": "2024-06-28",
-      "color": "orange",
       "member": [],
       "list": "",
       "image": "",
