@@ -1,6 +1,6 @@
-import { Card } from "../../../interface";
+import { Template } from "../../../interface";
 
-export default async function CreateCard (card: Card) {
+export default async function CreateCard (card: Template) {
     const response = await fetch (`/api/card-template-api/add-card`, {
         method: "POST",
         headers: {

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { Card } from "../../../interface";
+import { Template } from "../../../interface";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
@@ -10,9 +10,9 @@ import 'leaflet-defaulticon-compatibility';
 import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css';
 
 interface EditTemplatePopupProps {
-    card: Card;
+    card: Template;
     onClose: () => void;
-    onSave: (updatedCard: Card) => void;
+    onSave: (updatedCard: Template) => void;
 }
 
 const EditTemplatePopup: React.FC<EditTemplatePopupProps> = ({ card, onClose, onSave }) => {
@@ -23,7 +23,7 @@ const EditTemplatePopup: React.FC<EditTemplatePopupProps> = ({ card, onClose, on
     const [color, setColor] = useState<string>(card.color);
     const [image, setImage] = useState<string>(card.image);
     const [hasMap, setMap] = useState<boolean>(card.map !== "");
-    const [position, setPosition] = useState(card.map ? card.map.split(",").map(Number) : [13.7563, 100.5018]);
+    const [position, setPosition] = useState(card.map ? card.map.split(",").map(Number) : [0,0]);
     const popupRef = useRef<HTMLDivElement>(null);
 
     const handleSave = () => {
@@ -69,7 +69,7 @@ const EditTemplatePopup: React.FC<EditTemplatePopupProps> = ({ card, onClose, on
             mapLocation = `${position[0]},${position[1]}`;
         }
 
-        const updatedCard: Card = {
+        const updatedCard: Template = {
             ...card,
             name,
             description,

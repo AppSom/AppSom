@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
-import { CardJSON } from '../../../../../interface';
+import { TemplateJSON } from '../../../../../interface';
 
 export async function POST(req: Request) {
     try {
@@ -9,7 +9,7 @@ export async function POST(req: Request) {
         const cardPath = path.resolve('./public/Storage/Card/card.json');
 
         const cardFileData = fs.readFileSync(cardPath, 'utf-8');
-        const cardJson: CardJSON = JSON.parse(cardFileData);
+        const cardJson: TemplateJSON = JSON.parse(cardFileData);
 
         cardJson.data.push(card.data);
 

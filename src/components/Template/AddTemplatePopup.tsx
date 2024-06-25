@@ -1,17 +1,18 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { Card } from "../../../interface";
+import { Template } from "../../../interface";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-defaulticon-compatibility';
 import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css';
+import { useSession } from "next-auth/react";
 
 interface AddTemplatePopupProps {
     onClose: () => void;
-    onSave: (newCard: Card) => void;
+    onSave: (newCard: Template) => void;
 }
 
 const AddTemplatePopup: React.FC<AddTemplatePopupProps> = ({ onClose, onSave }) => {
@@ -22,8 +23,12 @@ const AddTemplatePopup: React.FC<AddTemplatePopupProps> = ({ onClose, onSave }) 
     const [color, setColor] = useState<string>("orange");
     const [image, setImage] = useState<string>("");
     const [hasMap , setMap] = useState<boolean>(false);
-    const [position, setPosition] = useState<[number, number]>([13.7563, 100.5018]);
+    const [position, setPosition] = useState<[number, number]>([0,0]);
     const popupRef = useRef<HTMLDivElement>(null);
+    const { data: session } = useSession();
+    if (!session) {
+        return null;
+    }
 
     const handleSave = () => {
         if (!name || !description || !dateStart || !dateEnd || (hasMap && !position)) {
@@ -68,18 +73,16 @@ const AddTemplatePopup: React.FC<AddTemplatePopupProps> = ({ onClose, onSave }) 
             mapLocation = `${position[0]},${position[1]}`;
         }
 
-        const newCard: Card = {
+        const newCard: Template = {
             id: crypto.randomUUID(),
             name,
             description,
             date_start: dateStart,
             date_end: dateEnd,
             color,
-            member: [],
-            list: "",
             image: image || "",
             map: mapLocation,
-            CheckList: []
+            userId: session.user.id
         };
         onSave(newCard);
         onClose();

@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import GetTemplateCard from '@/lib/Card-template/readCard';
-import { Card } from '../../../interface';
+import { Template } from '../../../interface';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { ToastContainer, toast } from 'react-toastify';
@@ -11,26 +11,38 @@ import DeleteTemplatePopup from './DeleteTemplatePopup';
 import CreateCard from '@/lib/Card-template/createCard';
 import DeleteCardById from '@/lib/Card-template/deleteCard';
 import UpdateCardById from '@/lib/Card-template/editCard';
+import { useSession } from 'next-auth/react';
 
 interface GetTemplatePopupProps {
     onClose: () => void;
 }
 
 const GetTemplatePopup: React.FC<GetTemplatePopupProps> = ({ onClose }) => {
-    const [templates, setTemplates] = useState<Card[]>([]);
+    const [templates, setTemplates] = useState<Template[]>([]);
     const [searchTerm, setSearchTerm] = useState<string>('');
-    const [searchResults, setSearchResults] = useState<Card[]>([]);
+    const [searchResults, setSearchResults] = useState<Template[]>([]);
     const [showAddTemplatePopup, setShowAddTemplatePopup] = useState<boolean>(false);
     const [showEditTemplatePopup, setShowEditTemplatePopup] = useState<boolean>(false);
     const [showDeleteTemplatePopup, setShowDeleteTemplatePopup] = useState<boolean>(false);
-    const [templateToEdit, setTemplateToEdit] = useState<Card | null>(null);
-    const [templateToDelete, setTemplateToDelete] = useState<Card | null>(null);
+    const [templateToEdit, setTemplateToEdit] = useState<Template | null>(null);
+    const [templateToDelete, setTemplateToDelete] = useState<Template | null>(null);
     const popupRef = useRef<HTMLDivElement>(null);
+
+    const { data: session } = useSession();
+    if (!session) {
+        return null;
+    }
 
     useEffect(() => {
         const fetchTemplates = async () => {
             const data = await GetTemplateCard();
-            setTemplates(data);
+            if(session.user.role !== "ADMIN"){
+                const filteredData = data.filter(data => data.userId === session.user.id);
+                setTemplates(filteredData)
+            } else {
+                setTemplates(data);
+            }
+            
         };
         fetchTemplates();
     }, []);
@@ -56,9 +68,12 @@ const GetTemplatePopup: React.FC<GetTemplatePopupProps> = ({ onClose }) => {
         setSearchResults(results);
     };
 
-    const handleAddTemplate = async (newTemplate: Card) => {
+    const handleAddTemplate = async (newTemplate: Template) => {
         await CreateCard(newTemplate);
         const updatedTemplates = await GetTemplateCard();
+        if(session.user.role !== "ADMIN"){
+            updatedTemplates.filter(data => data.userId === session.user.id);
+        }
         setTemplates(updatedTemplates);
         toast.success('Template Added Successfully', {
             position: "bottom-right",
@@ -72,15 +87,16 @@ const GetTemplatePopup: React.FC<GetTemplatePopupProps> = ({ onClose }) => {
         });
     };
 
-    const handleEditTemplate = (template: Card) => {
+    const handleEditTemplate = (template: Template) => {
         setTemplateToEdit(template);
         setShowEditTemplatePopup(true);
     };
 
-    const handleSaveEditTemplate = async (updatedCard: Card) => {
+    const handleSaveEditTemplate = async (updatedCard: Template) => {
         const updatedTemplates = templates.map((template) =>
             template.id === updatedCard.id ? updatedCard : template
         );
+        console.log(updatedCard)
         await UpdateCardById(updatedCard)
         setTemplates(updatedTemplates);
         toast.success('Template Updated Successfully', {
@@ -95,7 +111,7 @@ const GetTemplatePopup: React.FC<GetTemplatePopupProps> = ({ onClose }) => {
         });
     };
 
-    const handleDeleteTemplate = (template: Card) => {
+    const handleDeleteTemplate = (template: Template) => {
         setTemplateToDelete(template);
         setShowDeleteTemplatePopup(true);
     };

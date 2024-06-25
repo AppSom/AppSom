@@ -21,6 +21,18 @@ export interface Card {
     CheckList: string[],
 }
 
+export interface Template {
+    id: string,
+    name: string,
+    description: string,
+    date_start: string,
+    date_end: string,
+    color: string,
+    image: string,
+    map: string,
+    userId: string,
+}
+
 export interface List {
     id: string,
     name: string,
@@ -56,6 +68,10 @@ export interface ListJSON {
 
 export interface CardJSON {
     data: Card[]
+}
+
+export interface TemplateJSON {
+    data: Template[]
 }
 
 export interface UserJSON {

@@ -1,15 +1,15 @@
 import { NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
-import { CardJSON } from '../../../../../interface';
+import { TemplateJSON } from '../../../../../interface';
 
 const cardPath = path.resolve('./public/Storage/Card/card.json');
-const readCards = (): CardJSON => {
+const readCards = (): TemplateJSON => {
     const cardFileData = fs.readFileSync(cardPath, 'utf-8');
     return JSON.parse(cardFileData);
 };
 
-const writeCards = (data: CardJSON) => {
+const writeCards = (data: TemplateJSON) => {
     fs.writeFileSync(cardPath, JSON.stringify(data, null, 2));
 };
 

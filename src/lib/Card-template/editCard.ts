@@ -1,6 +1,6 @@
-import { Card } from "../../../interface";
+import { Template } from "../../../interface";
 
-export default async function UpdateCardById (card: Card) {
+export default async function UpdateCardById (card: Template) {
     const response = await fetch (`/api/card-template-api/edit-card`, {
         method: "PUT",
         headers: {
