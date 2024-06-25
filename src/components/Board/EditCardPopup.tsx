@@ -96,7 +96,11 @@ const EditCardPopup: React.FC<EditCardPopupProps> = ({ card, onClose, onSave }) 
     };
 
     const convertBase64ToImage = (base64: string) => {
-        return <img src={base64} alt="Uploaded" />;
+        return (
+            <div className="flex justify-center">
+                <img src={base64} alt="Uploaded" className="h-24 w-auto"/>
+            </div>
+        )
     };
 
     const ClickableMarker = () => {
@@ -139,12 +143,14 @@ const EditCardPopup: React.FC<EditCardPopupProps> = ({ card, onClose, onSave }) 
                                 value={dateStart}
                                 onChange={(e) => setDateStart(e.target.value)}
                                 className="w-1/2 mr-1 p-2 border rounded border-gray-500 text-black"
+                                max={dateEnd}
                             />
                             <input
                                 type="date"
                                 value={dateEnd}
                                 onChange={(e) => setDateEnd(e.target.value)}
                                 className="w-1/2 ml-1 p-2 border rounded border-gray-500 text-black"
+                                min={dateStart}
                             />
                         </div>
                         <div className="flex justify-center space-x-2 mb-3">
@@ -170,7 +176,7 @@ const EditCardPopup: React.FC<EditCardPopupProps> = ({ card, onClose, onSave }) 
                         </div>
                         {location && (
                             <div>
-                                <MapContainer className="w-full h-64 mb-3" center={[position[0], position[1]]} zoom={16}>
+                                <MapContainer className="w-full h-36 mb-3" center={[position[0], position[1]]} zoom={16}>
                                     <ClickableMarker />
                                     <TileLayer
                                         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

@@ -136,7 +136,7 @@ const GetTemplatePopup: React.FC<GetTemplatePopupProps> = ({ onClose }) => {
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
             <div ref={popupRef} className="bg-white p-5 rounded shadow-lg w-96 z-50">
-                <h2 className="text-xl font-bold mb-5 text-center">Templates</h2>
+                <h2 className="text-xl font-bold mb-5 text-center text-black">Templates</h2>
                 <input
                     type="text"
                     placeholder="Search templates..."

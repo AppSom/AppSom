@@ -72,7 +72,11 @@ const ViewCardPopup: React.FC<ViewCardPopupProps> = ({ onClose, cid, lid }) => {
     }
 
     const convertBase64ToImage = (base64: string) => {
-        return <img src={base64} alt="Uploaded" />;
+        return (
+            <div className="flex justify-center">
+                <img src={base64} alt="Uploaded" className="h-32 w-auto"/>
+            </div>
+        )
     };
 
     let coordinates, latitude, longitude;
@@ -90,9 +94,9 @@ const ViewCardPopup: React.FC<ViewCardPopupProps> = ({ onClose, cid, lid }) => {
                         <div className="font-bold text-3xl">{card.name}</div>
                         <div className="w-40 h-8 rounded-3xl" style={{ backgroundColor: card.color }}></div>
                 </div>
-                <div className='flex flex-row gap-5'>
+                <div className='flex flex-row gap-5 flex-nowrap'>
                     <div>
-                        <div className="mb-3 text-xl">{card.description}</div>
+                        <div className="mb-3 text-xl break-words">{card.description}</div>
                         <div className="mb-3">
                             <strong>Date :</strong> {new Date(card.date_start).toLocaleDateString()} - {new Date(card.date_end).toLocaleDateString()}
                         </div>
