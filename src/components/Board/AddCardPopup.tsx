@@ -16,10 +16,10 @@ interface AddCardPopupProps {
 }
 
 const AddCardPopup: React.FC<AddCardPopupProps> = ({ listId, onClose, onSave }) => {
-    const today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
+    const today = new Date().toISOString().split('T')[0];
     const [name, setName] = useState<string>("");
     const [description, setDescription] = useState<string>("");
-    const [dateStart, setDateStart] = useState<string>(today); // Set initial start date to today
+    const [dateStart, setDateStart] = useState<string>(today);
     const [dateEnd, setDateEnd] = useState<string>("");
     const [color, setColor] = useState<string>("orange");
     const [image, setImage] = useState<string>("");
