@@ -143,6 +143,35 @@
               "image": "/uploads/eaf63a4f-19a6-40e7-b87a-bb2f702a5cb3_ProfilePic.png",
               "map": "13.746597,100.539360",
               "CheckList": []
+            },
+            {
+              "id": "3153ba0d-6ec7-44cd-80b0-6b0018a12146",
+              "name": "s",
+              "description": "s",
+              "date_start": "2024-06-25",
+              "date_end": "2024-06-29",
+              "color": "purple",
+              "member": [],
+              "list": "f8111c48-7ae3-4625-87a9-f813c6cb9ca6",
+              "image": "",
+              "map": "",
+              "CheckList":[
+                {
+                  "id": "0001",
+                  "name": "Help1",
+                  "show": true
+                },
+                {
+                  "id": "0002",
+                  "name": "Help2",
+                  "show": false
+                },
+                {
+                  "id": "0003",
+                  "name": "Help3",
+                  "show": false
+                }
+              ] 
             }
           ],
           "board": "03ed84ce-496c-4e27-8b0a-e6919c6b841b"

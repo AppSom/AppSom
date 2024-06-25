@@ -18,7 +18,7 @@ export interface Card {
     list: string
     image: string;
     map: string
-    CheckList: string[],
+    CheckList: CheckList[],
 }
 
 export interface Template {
