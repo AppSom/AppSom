@@ -2,10 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { Board, List, Card } from "../../../../../interface";
-import GetBoardById from "@/lib/GetBoardById";
+import GetBoardById from "@/lib/Board/GetBoardById";
 import BoardNav from "@/components/ControlSystem/boardNav";
-import CreateList from "@/lib/CreateList";
-import CreateCard from "@/lib/CreateCard";
+import CreateList from "@/lib/List/CreateList";
+import CreateCard from "@/lib/Card/CreateCard";
 import CardList from "@/components/Board/CardList";
 import Image from "next/image";
 import AddListPopup from "@/components/Board/AddListPopup";
@@ -15,17 +15,17 @@ import ListOptionsPopup from "@/components/Board/ListOptionsPopup";
 import DeleteListPopup from "@/components/Board/DeleteListPopup";
 import AddCardPopup from "@/components/Board/AddCardPopup";
 import { DragDropContext, Droppable, Draggable, DropResult } from "react-beautiful-dnd";
-import UpdateBoardById from "@/lib/UpdateBoardById";
-import UpdateListById from "@/lib/UpdateListById";
-import DeleteListById from "@/lib/DeleteListById";
+import UpdateBoardById from "@/lib/Board/UpdateBoardById";
+import UpdateListById from "@/lib/List/UpdateListById";
+import DeleteListById from "@/lib/List/DeleteListById";
 import CheckOwner from "@/lib/CheckOwner";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import EditCardPopup from "@/components/Board/EditCardPopup";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import UpdateCardById from "@/lib/UpdateCardById";
-import GetListById from "@/lib/GetListById";
+import UpdateCardById from "@/lib/Card/UpdateCardById";
+import GetListById from "@/lib/List/GetListById";
 import 'leaflet/dist/leaflet.css';
 
 interface BoardIdPageProps {

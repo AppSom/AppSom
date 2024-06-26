@@ -1,12 +1,16 @@
 import { useState, useEffect, useRef } from 'react';
 import { Card, List, Board, User, CheckList } from '../../../interface';
 import GetUserProfile from '@/lib/GetUserProfile';
-import GetBoards from '@/lib/GetBoards';
+import GetBoards from '@/lib/Board/GetBoards';
 import { MapContainer, TileLayer, Marker } from 'react-leaflet';
 import AddChecklistPopup from './AddChecklistPopup'; // Adjust the import path as needed
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-defaulticon-compatibility';
 import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css';
+import AddCheckList from '@/lib/Card/AddCheckList';
+import CheckCheckList from '@/lib/Card/CheckCheckList';
+import Image from 'next/image';
+import RemoveCheckList from '@/lib/Card/RemoveCheckList';
 
 interface ViewCardPopupProps {
     onClose: () => void;
@@ -70,7 +74,12 @@ const ViewCardPopup: React.FC<ViewCardPopupProps> = ({ onClose, cid, lid, update
         };
     }, []);
 
-    const handleCheckboxChange = (id: string) => {
+    if (!board || !list || !card) {
+        return null;
+    }
+
+    const handleCheckboxChange = async (id: string, show: boolean) => {
+        await CheckCheckList(id, card.id, list.id, board.id, !show);
         setChecklists((prevChecklists) =>
             prevChecklists.map((checklist) =>
                 checklist.id === id ? { ...checklist, show: !checklist.show } : checklist
@@ -84,7 +93,8 @@ const ViewCardPopup: React.FC<ViewCardPopupProps> = ({ onClose, cid, lid, update
         }
     };
 
-    const handleAddChecklist = (checklist: CheckList) => {
+    const handleAddChecklist = async (checklist: CheckList) => {
+        await AddCheckList(checklist, cid, lid, list?.board);
         const updatedChecklists = [...checklists, checklist];
         setChecklists(updatedChecklists);
         if (card) {
@@ -94,9 +104,18 @@ const ViewCardPopup: React.FC<ViewCardPopupProps> = ({ onClose, cid, lid, update
         }
     };
 
-    if (!board || !list || !card) {
-        return null;
+    const handleRemoveCheckList = async (ch_id: string) => {
+        await RemoveCheckList(ch_id, cid, lid, list.board);
+        const updatedChecklists = checklists.filter(ch => ch.id != ch_id);
+        setChecklists(updatedChecklists);
+        if (card) {
+            const updatedCard = { ...card, CheckList: updatedChecklists};
+            setCard(updatedCard);
+            updateCard(updatedCard);
+        }
     }
+
+    
 
     const convertBase64ToImage = (base64: string) => {
         return (
@@ -152,16 +171,28 @@ const ViewCardPopup: React.FC<ViewCardPopupProps> = ({ onClose, cid, lid, update
                         )}
                     </div>
                 </div>
-                <div className="mb-2">
+                <div className="mb-2"> 
                     <div className="font-bold mb-2">Checklist</div>
+                        {
+                            checklists.length != 0 ? 
+                            <div>
+                            <label htmlFor="progress" className='inline-block w-[50px]'>{Math.round(checklists.filter(c => c.show).length / checklists.length * 100)}%</label>
+                            <progress id="progress"
+                            className='[&::-webkit-progress-bar]:rounded [&::-webkit-progress-value]:rounded [&::-webkit-progress-bar]:bg-slate-100 [&::-webkit-progress-value]:bg-blue-500' 
+                            value={checklists.filter(c => c.show === true).length / checklists.length} max={1}></progress></div>
+                             : null
+                        }
                     {checklists.map((checklist) => (
                         <li key={checklist.id} className="flex flex-row mb-1 gap-3 justify-start">
                             <input
                                 type="checkbox"
                                 checked={checklist.show}
-                                onChange={() => handleCheckboxChange(checklist.id)}
+                                onChange={() => handleCheckboxChange(checklist.id, checklist.show)}
                             />
                             <div>{checklist.name}</div>
+                            <button onClick={() => {handleRemoveCheckList(checklist.id)}} className="p-0 ml-auto">
+                                <Image src="/Image/delete.png" alt="Delete" width={25} height={25} />
+                            </button>
                         </li>
                     ))}
                 </div>

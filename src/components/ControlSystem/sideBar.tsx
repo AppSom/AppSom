@@ -7,7 +7,7 @@ import { faThLarge, faCalendarAlt, faStar, faEllipsisV, faCog, faPlus } from '@f
 import Link from 'next/link';
 import { useSession, signOut } from 'next-auth/react';
 import { Board, BoardJSON } from '../../../interface';
-import GetBoards from '@/lib/GetBoards';
+import GetBoards from '@/lib/Board/GetBoards';
 import GetTemplatePopup from '../Template/GetTemplatePopup';
 
 export default function Sidebar() {

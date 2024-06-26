@@ -3,7 +3,7 @@
 import { useSession } from 'next-auth/react';
 import { useState, useEffect, useRef } from 'react';
 import { Board, BoardJSON, Card } from '../../../interface';
-import GetBoards from '@/lib/GetBoards';
+import GetBoards from '@/lib/Board/GetBoards';
 import ViewCardPopup from '@/components/Board/ViewCardPopup';
 
 const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']; 

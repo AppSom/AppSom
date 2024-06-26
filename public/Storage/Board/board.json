@@ -142,7 +142,13 @@
               "list": "f8111c48-7ae3-4625-87a9-f813c6cb9ca6",
               "image": "/uploads/eaf63a4f-19a6-40e7-b87a-bb2f702a5cb3_ProfilePic.png",
               "map": "13.746597,100.539360",
-              "CheckList": []
+              "CheckList": [
+                {
+                  "id": "1719377189824",
+                  "name": "d",
+                  "show": false
+                }
+              ]
             },
             {
               "id": "3153ba0d-6ec7-44cd-80b0-6b0018a12146",
@@ -169,7 +175,7 @@
                 {
                   "id": "0003",
                   "name": "Help3",
-                  "show": false
+                  "show": true
                 }
               ]
             }

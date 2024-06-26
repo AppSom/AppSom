@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { Board } from "../../../interface";
 import Image from "next/image";
-import UpdateBoardById from "@/lib/UpdateBoardById";
-import DeleteBoardById from "@/lib/DeleteBoardByID";
+import UpdateBoardById from "@/lib/Board/UpdateBoardById";
+import DeleteBoardById from "@/lib/Board/DeleteBoardById";
 import { useSession } from "next-auth/react";
 import EditBoardPopup from "../Board/EditBoardPopup";
 import DeleteBoardPopup from "../Board/DeleteBoardPopup";

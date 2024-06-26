@@ -1,11 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
 import { Board, User, UserJSON } from '../../../interface';
 import GetUserProfile from '@/lib/GetUserProfile';
-import UpdateBoardById from '@/lib/UpdateBoardById';
-import RemoveMemberBoard from '@/lib/RemoveMemberBoard';
-import GetBoardById from '@/lib/GetBoardById';
+import UpdateBoardById from '@/lib/Board/UpdateBoardById';
+import RemoveMemberBoard from '@/lib/Board/RemoveMemberBoard';
+import GetBoardById from '@/lib/Board/GetBoardById';
 import CheckOwner from '@/lib/CheckOwner';
-import AddMemberBoard from '@/lib/AddMemberBoard';
+import AddMemberBoard from '@/lib/Board/AddMemberBoard';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 

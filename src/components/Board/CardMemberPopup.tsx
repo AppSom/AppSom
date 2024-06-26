@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
 import { Card, List, Board, User, UserJSON, BoardJSON } from '../../../interface';
 import GetUserProfile from '@/lib/GetUserProfile';
-import GetBoards from '@/lib/GetBoards';
-import AddMemberCard from '@/lib/AddMemberCard';
-import RemoveMemberCard from '@/lib/RemoveMemberCard';
+import GetBoards from '@/lib/Board/GetBoards';
+import AddMemberCard from '@/lib/Card/AddMemberCard';
+import RemoveMemberCard from '@/lib/Card/RemoveMemberCard';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 

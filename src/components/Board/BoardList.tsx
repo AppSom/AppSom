@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { Board, BoardJSON } from "../../../interface";
-import GetBoards from "@/lib/GetBoards";
-import CreateBoard from "@/lib/CreateBoard";
+import GetBoards from "@/lib/Board/GetBoards";
+import CreateBoard from "@/lib/Board/CreateBoard";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import AddBoardPopup from "./AddBoardPopup";

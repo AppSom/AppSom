@@ -5,7 +5,7 @@ import CardOptionsPopup from "./CardOptionsPopup";
 import ViewCardPopup from "./ViewCardPopup";
 import DeleteCardPopup from "./DeleteCardPopup";
 import CardMemberPopup from "./CardMemberPopup";
-import DeleteCardById from "@/lib/DeleteCardById";
+import DeleteCardById from "@/lib/Card/DeleteCardById";
 
 interface CardListProps {
     list: List;
