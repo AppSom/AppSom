@@ -1,43 +1,36 @@
 import { useEffect, useState } from "react";
-import { Card, List, Template } from "../../../interface";
+import { Card, List } from "../../../interface";
 import { Droppable, Draggable } from "react-beautiful-dnd";
 import CardOptionsPopup from "./CardOptionsPopup";
-import ViewCardPopup from "./ViewCardPopup";
-import DeleteCardPopup from "./DeleteCardPopup";
-import CardMemberPopup from "./CardMemberPopup";
-import DeleteCardById from "@/lib/Card/DeleteCardById";
-import CardChecklist from "./CardChecklist";
-import AddCardToTemplatePopup from "../Template/AddCardToTemplatePopup";
 import { useSession } from "next-auth/react";
 
 interface CardListProps {
     list: List;
     onEditCard: (card: Card) => void;
     onAddCard: (listId: string) => void;
+    onViewCard: (card: Card) => void;
+    onDeleteCard: (card: Card) => void;
+    onMemberCard: (card: Card) => void;
+    onChecklist: (card: Card) => void;
+    onSaveAsTemplate: (card: Card) => void;
     permission: boolean;
 }
 
-export default function CardList({ list, onEditCard, onAddCard, permission }: CardListProps) {
+export default function CardList({ list, onEditCard, onAddCard, onViewCard, onDeleteCard, onMemberCard, onChecklist, onSaveAsTemplate, permission }: CardListProps) {
     const [cards, setCards] = useState<Card[]>(list.cards);
     const [popupVisible, setPopupVisible] = useState(false);
     const [popupPosition, setPopupPosition] = useState<{ top: number; left: number }>({ top: 0, left: 0 });
     const [selectedCard, setSelectedCard] = useState<Card | null>(null);
-    const [viewPopupVisible, setViewPopupVisible] = useState(false);
-    const [deletePopupVisible, setDeletePopupVisible] = useState(false);
-    const [memberPopupVisible, setMemberPopupVisible] = useState(false);
-    const [checklistPopupVisible, setChecklistPopupVisible] = useState(false);
-    const [addCardToTemplatePopupVisible, setAddCardToTemplatePopupVisible] = useState(false);
     const { data: session } = useSession();
     if (!session) {
         return null;
-      }
+    }
 
     useEffect(() => {
         setCards(list.cards);
     }, [list.cards]);
 
     const handleCardClick = (card: Card, event: React.MouseEvent) => {
-        const rect = event.currentTarget.getBoundingClientRect();
         setPopupPosition({
             top: event.clientY,
             left: event.clientX
@@ -51,12 +44,10 @@ export default function CardList({ list, onEditCard, onAddCard, permission }: Ca
     };
 
     const handleView = () => {
-        setViewPopupVisible(true);
+        if (selectedCard) {
+            onViewCard(selectedCard);
+        }
         handleClosePopup();
-    };
-
-    const handleCloseViewPopup = () => {
-        setViewPopupVisible(false);
     };
 
     const handleEdit = () => {
@@ -67,64 +58,31 @@ export default function CardList({ list, onEditCard, onAddCard, permission }: Ca
     };
 
     const handleDelete = () => {
-        console.log("Delete card:", selectedCard);
-        setDeletePopupVisible(true);
-        handleClosePopup();
-    };
-
-    const onDeleteHandler = async () => {
-        if (!selectedCard) {
-            return;
+        if (selectedCard) {
+            onDeleteCard(selectedCard);
         }
-        await DeleteCardById(selectedCard.id, selectedCard.list, list.board);
-        setCards(cards.filter(c => c.id !== selectedCard.id));
-        setDeletePopupVisible(false);
+        handleClosePopup();
     };
 
     const handleMemberCard = () => {
-        setMemberPopupVisible(true);
+        if (selectedCard) {
+            onMemberCard(selectedCard);
+        }
         handleClosePopup();
-    };
-
-    const handleCloseMemberPopup = () => {
-        setMemberPopupVisible(false);
-    };
-
-    const handleCardUpdate = (updatedCard: Card) => {
-        setCards(prevCards => prevCards.map(card => card.id === updatedCard.id ? updatedCard : card));
     };
 
     const handleChecklist = () => {
-        setChecklistPopupVisible(true);
+        if (selectedCard) {
+            onChecklist(selectedCard);
+        }
         handleClosePopup();
-    };
-
-    const handleCloseChecklistPopup = () => {
-        setChecklistPopupVisible(false);
     };
 
     const handleSaveAsTemplate = () => {
-        setAddCardToTemplatePopupVisible(true);
-        handleClosePopup();
-    };
-
-    const handleCloseAddCardToTemplatePopup = () => {
-        setAddCardToTemplatePopupVisible(false);
-    };
-
-    const templateCard = (card: Card) => {
-        const myCard: Template = {
-            id: crypto.randomUUID(),
-            name: card.name,
-            description: card.description,
-            date_start: card.date_start,
-            date_end: card.date_end,
-            color: card.color,
-            image: card.image || "",
-            map: card.map,
-            userId: session.user.id
+        if (selectedCard) {
+            onSaveAsTemplate(selectedCard);
         }
-        return myCard;
+        handleClosePopup();
     };
 
     return (
@@ -173,51 +131,6 @@ export default function CardList({ list, onEditCard, onAddCard, permission }: Ca
                             position={popupPosition}
                             permission={permission}
                         />
-                    )}
-                    {viewPopupVisible && selectedCard && (
-                        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-15">
-                            <ViewCardPopup
-                                onClose={handleCloseViewPopup}
-                                cid={selectedCard.id}
-                                lid={selectedCard.list}
-                                updateCard={handleCardUpdate}
-                            />
-                        </div>
-                    )}
-                    {deletePopupVisible && selectedCard && (
-                        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-15">
-                            <DeleteCardPopup
-                                onClose={() => setDeletePopupVisible(false)}
-                                onDelete={onDeleteHandler}
-                            />
-                        </div>
-                    )}
-                    {memberPopupVisible && selectedCard && (
-                        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-15">
-                            <CardMemberPopup
-                                cid={selectedCard.id}
-                                lid={selectedCard.list}
-                                onClose={handleCloseMemberPopup}
-                            />
-                        </div>
-                    )}
-                    {checklistPopupVisible && selectedCard && (
-                        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-15">
-                            <CardChecklist
-                                onClose={handleCloseChecklistPopup}
-                                cid={selectedCard.id}
-                                lid={selectedCard.list}
-                                updateCard={handleCardUpdate}
-                            />
-                        </div>
-                    )}
-                    {addCardToTemplatePopupVisible && selectedCard && (
-                        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-15">
-                            <AddCardToTemplatePopup
-                                onClose={handleCloseAddCardToTemplatePopup}
-                                card={templateCard(selectedCard)}
-                            />
-                        </div>
                     )}
                 </div>
             )}

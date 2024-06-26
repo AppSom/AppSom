@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from "react";
-import { Board, List, Card } from "../../../../../interface";
+import { Board, List, Card, Template } from "../../../../../interface";
 import GetBoardById from "@/lib/Board/GetBoardById";
 import BoardNav from "@/components/ControlSystem/boardNav";
 import CreateList from "@/lib/List/CreateList";
@@ -25,8 +25,13 @@ import EditCardPopup from "@/components/Board/EditCardPopup";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import UpdateCardById from "@/lib/Card/UpdateCardById";
-import GetListById from "@/lib/List/GetListById";
+import ViewCardPopup from "@/components/Board/ViewCardPopup";
+import DeleteCardPopup from "@/components/Board/DeleteCardPopup";
+import CardMemberPopup from "@/components/Board/CardMemberPopup";
+import CardChecklist from "@/components/Board/CardChecklist";
+import AddCardToTemplatePopup from "@/components/Template/AddCardToTemplatePopup";
 import 'leaflet/dist/leaflet.css';
+import DeleteCardById from "@/lib/Card/DeleteCardById";
 
 interface BoardIdPageProps {
     params: {
@@ -48,6 +53,13 @@ const BoardIdPage: React.FC<BoardIdPageProps> = ({ params }) => {
     const [selectedCard, setSelectedCard] = useState<Card | null>(null);
     const {data: session} = useSession();
     const router = useRouter();
+    
+    const [showViewCardPopup, setShowViewCardPopup] = useState<boolean>(false);
+    const [showDeleteCardPopup, setShowDeleteCardPopup] = useState<boolean>(false);
+    const [showMemberCardPopup, setShowMemberCardPopup] = useState<boolean>(false);
+    const [showChecklistPopup, setShowChecklistPopup] = useState<boolean>(false);
+    const [showAddCardToTemplatePopup, setShowAddCardToTemplatePopup] = useState<boolean>(false);
+
     if (!session) {
         return null;
     }
@@ -275,6 +287,67 @@ const BoardIdPage: React.FC<BoardIdPageProps> = ({ params }) => {
         router.push('/board');
     }
 
+    const handleViewCardClick = (card: Card) => {
+        setSelectedCard(card);
+        setShowViewCardPopup(true);
+    };
+
+    const handleDeleteCardClick = (card: Card) => {
+        setSelectedCard(card);
+        setShowDeleteCardPopup(true);
+    };
+
+    const handleDeleteCard = async () => {
+        if (!selectedCard) {
+            return;
+        }
+        await DeleteCardById(selectedCard.id, selectedCard.list, board.id);
+        const updatedBoard = await GetBoardById(params.bid);
+        if (!updatedBoard) {
+            return;
+        }
+        setLists(updatedBoard.lists);
+        setBoard(updatedBoard);
+        setShowDeleteCardPopup(false);
+    };
+
+    const handleMemberCardClick = (card: Card) => {
+        setSelectedCard(card);
+        setShowMemberCardPopup(true);
+    };
+
+    const handleChecklistClick = (card: Card) => {
+        setSelectedCard(card);
+        setShowChecklistPopup(true);
+    };
+
+    const handleSaveAsTemplateClick = (card: Card) => {
+        setSelectedCard(card);
+        setShowAddCardToTemplatePopup(true);
+    };
+
+    const handleCardUpdate = (updatedCard: Card) => {
+        const updatedLists = lists.map((list) =>
+            list.id === updatedCard.list ? { ...list, cards: list.cards.map((card) => (card.id === updatedCard.id ? updatedCard : card)) } : list
+        );
+        setLists(updatedLists);
+    };
+
+    const templateCard = (card: Card) => {
+        const myCard: Template = {
+            id: crypto.randomUUID(),
+            name: card.name,
+            description: card.description,
+            date_start: card.date_start,
+            date_end: card.date_end,
+            color: card.color,
+            image: card.image || "",
+            map: card.map,
+            userId: session.user.id
+        }
+        return myCard;
+    };
+
     return (
         <div className="flex flex-col flex-wrap bg-somon min-h-screen ml-64 overflow-auto">
             {
@@ -310,7 +383,7 @@ const BoardIdPage: React.FC<BoardIdPageProps> = ({ params }) => {
                                                     onClick={() => handleOptionsClick(l)}
                                                 />
                                             </div>
-                                            <CardList list={l} onEditCard={handleEditCardClick} onAddCard={handleAddCard} permission={CheckOwner(board.owner, session.user.id)} />
+                                            <CardList list={l} onEditCard={handleEditCardClick} onAddCard={handleAddCard} permission={CheckOwner(board.owner, session.user.id)} onViewCard={handleViewCardClick} onDeleteCard={handleDeleteCardClick} onMemberCard={handleMemberCardClick} onChecklist={handleChecklistClick} onSaveAsTemplate={handleSaveAsTemplateClick} />
                                             {showOptionsPopup && selectedList?.id === l.id && (
                                                 <ListOptionsPopup
                                                     onClose={() => setShowOptionsPopup(false)}
@@ -385,8 +458,7 @@ const BoardIdPage: React.FC<BoardIdPageProps> = ({ params }) => {
                 />
                 </div>
             )}
-            {
-            showEditCardPopup && selectedCard && (
+            {showEditCardPopup && selectedCard && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-15">
                 <EditCardPopup
                     card={selectedCard}
@@ -394,7 +466,52 @@ const BoardIdPage: React.FC<BoardIdPageProps> = ({ params }) => {
                     onSave={handleSaveEditCard}
                 />
                 </div>
-            )}            
+            )}
+            {showViewCardPopup && selectedCard && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-15">
+                    <ViewCardPopup
+                        onClose={() => setShowViewCardPopup(false)}
+                        cid={selectedCard.id}
+                        lid={selectedCard.list}
+                        updateCard={handleCardUpdate}
+                    />
+                </div>
+            )}
+            {showDeleteCardPopup && selectedCard && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-15">
+                    <DeleteCardPopup
+                        onClose={() => setShowDeleteCardPopup(false)}
+                        onDelete={handleDeleteCard}
+                    />
+                </div>
+            )}
+            {showMemberCardPopup && selectedCard && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-15">
+                    <CardMemberPopup
+                        cid={selectedCard.id}
+                        lid={selectedCard.list}
+                        onClose={() => setShowMemberCardPopup(false)}
+                    />
+                </div>
+            )}
+            {showChecklistPopup && selectedCard && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-15">
+                    <CardChecklist
+                        onClose={() => setShowChecklistPopup(false)}
+                        cid={selectedCard.id}
+                        lid={selectedCard.list}
+                        updateCard={handleCardUpdate}
+                    />
+                </div>
+            )}
+            {showAddCardToTemplatePopup && selectedCard && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-15">
+                    <AddCardToTemplatePopup
+                        onClose={() => setShowAddCardToTemplatePopup(false)}
+                        card={templateCard(selectedCard)}
+                    />
+                </div>
+            )}
         </div> 
             : null
         }
