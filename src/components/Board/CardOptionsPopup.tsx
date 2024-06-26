@@ -1,5 +1,3 @@
-// CardOptionsPopup.tsx
-
 import React, { useEffect, useRef } from "react";
 
 interface CardOptionsPopupProps {
@@ -8,11 +6,12 @@ interface CardOptionsPopupProps {
     onEdit: () => void;
     onDelete: () => void;
     onMember: () => void;
+    onChecklist: () => void;
     position: { top: number; left: number };
     permission: boolean;
 }
 
-const CardOptionsPopup: React.FC<CardOptionsPopupProps> = ({ onClose, onView, onEdit, onDelete, onMember, position, permission }) => {
+const CardOptionsPopup: React.FC<CardOptionsPopupProps> = ({ onClose, onView, onEdit, onDelete, onMember, onChecklist, position, permission }) => {
     const popupRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -41,6 +40,7 @@ const CardOptionsPopup: React.FC<CardOptionsPopupProps> = ({ onClose, onView, on
                 <div>
                     <button className="block w-full text-left p-2 hover:bg-gray-200" onClick={onEdit}>Edit</button>
                     <button className="block w-full text-left p-2 hover:bg-gray-200" onClick={onMember}>Member</button>
+                    <button className="block w-full text-left p-2 hover:bg-gray-200" onClick={onChecklist}>Checklist</button>
                     <button className="block w-full text-left p-2 hover:bg-gray-200" onClick={onDelete}>Delete</button>
                 </div> : null
             }

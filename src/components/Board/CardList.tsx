@@ -6,6 +6,7 @@ import ViewCardPopup from "./ViewCardPopup";
 import DeleteCardPopup from "./DeleteCardPopup";
 import CardMemberPopup from "./CardMemberPopup";
 import DeleteCardById from "@/lib/Card/DeleteCardById";
+import CardChecklist from "./CardChecklist"; // Import the new CardChecklist component
 
 interface CardListProps {
     list: List;
@@ -22,6 +23,7 @@ export default function CardList({ list, onEditCard, onAddCard, permission }: Ca
     const [viewPopupVisible, setViewPopupVisible] = useState(false);
     const [deletePopupVisible, setDeletePopupVisible] = useState(false);
     const [memberPopupVisible, setMemberPopupVisible] = useState(false);
+    const [checklistPopupVisible, setChecklistPopupVisible] = useState(false); // State for checklist popup
 
     useEffect(() => {
         setCards(list.cards);
@@ -85,6 +87,15 @@ export default function CardList({ list, onEditCard, onAddCard, permission }: Ca
         setCards(prevCards => prevCards.map(card => card.id === updatedCard.id ? updatedCard : card));
     };
 
+    const handleChecklist = () => {
+        setChecklistPopupVisible(true); // Show checklist popup
+        handleClosePopup();
+    };
+
+    const handleCloseChecklistPopup = () => {
+        setChecklistPopupVisible(false); // Hide checklist popup
+    };
+
     return (
         <Droppable droppableId={list.id} type="card">
             {(provided) => (
@@ -126,6 +137,7 @@ export default function CardList({ list, onEditCard, onAddCard, permission }: Ca
                             onEdit={handleEdit}
                             onMember={handleMemberCard}
                             onDelete={handleDelete}
+                            onChecklist={handleChecklist} // Add the checklist handler
                             position={popupPosition}
                             permission={permission}
                         />
@@ -136,7 +148,7 @@ export default function CardList({ list, onEditCard, onAddCard, permission }: Ca
                                 onClose={handleCloseViewPopup}
                                 cid={selectedCard.id}
                                 lid={selectedCard.list}
-                                updateCard={handleCardUpdate} // Pass the updateCard function
+                                updateCard={handleCardUpdate}
                             />
                         </div>
                     )}
@@ -154,6 +166,16 @@ export default function CardList({ list, onEditCard, onAddCard, permission }: Ca
                                 cid={selectedCard.id}
                                 lid={selectedCard.list}
                                 onClose={handleCloseMemberPopup}
+                            />
+                        </div>
+                    )}
+                    {checklistPopupVisible && selectedCard && (
+                        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-15">
+                            <CardChecklist
+                                onClose={handleCloseChecklistPopup}
+                                cid={selectedCard.id}
+                                lid={selectedCard.list}
+                                updateCard={handleCardUpdate}
                             />
                         </div>
                     )}
