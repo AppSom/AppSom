@@ -32,6 +32,7 @@ import CardChecklist from "@/components/Board/CardChecklist";
 import AddCardToTemplatePopup from "@/components/Template/AddCardToTemplatePopup";
 import 'leaflet/dist/leaflet.css';
 import DeleteCardById from "@/lib/Card/DeleteCardById";
+import Loading from "@/components/Loading";
 
 interface BoardIdPageProps {
     params: {
@@ -53,16 +54,23 @@ const BoardIdPage: React.FC<BoardIdPageProps> = ({ params }) => {
     const [selectedCard, setSelectedCard] = useState<Card | null>(null);
     const {data: session} = useSession();
     const router = useRouter();
-    
     const [showViewCardPopup, setShowViewCardPopup] = useState<boolean>(false);
     const [showDeleteCardPopup, setShowDeleteCardPopup] = useState<boolean>(false);
     const [showMemberCardPopup, setShowMemberCardPopup] = useState<boolean>(false);
     const [showChecklistPopup, setShowChecklistPopup] = useState<boolean>(false);
     const [showAddCardToTemplatePopup, setShowAddCardToTemplatePopup] = useState<boolean>(false);
+    const[loading,setLoading] = useState(false);
 
     if (!session) {
         return null;
     }
+
+    useEffect(()=>{
+        setLoading(true)
+        setTimeout(()=>{
+            setLoading(false)
+        },1500)
+    },[]);
 
     useEffect(() => {
         const loadList = async () => {
@@ -347,6 +355,12 @@ const BoardIdPage: React.FC<BoardIdPageProps> = ({ params }) => {
         }
         return myCard;
     };
+
+    if(loading){
+        return(
+            <Loading/>
+        )
+    }
 
     return (
         <div className="flex flex-col flex-wrap bg-somon min-h-screen ml-64 overflow-auto">
