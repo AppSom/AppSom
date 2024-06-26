@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
-import { Card, List } from "../../../interface";
+import { Card, List, Template } from "../../../interface";
 import { Droppable, Draggable } from "react-beautiful-dnd";
 import CardOptionsPopup from "./CardOptionsPopup";
 import ViewCardPopup from "./ViewCardPopup";
 import DeleteCardPopup from "./DeleteCardPopup";
 import CardMemberPopup from "./CardMemberPopup";
 import DeleteCardById from "@/lib/Card/DeleteCardById";
-import CardChecklist from "./CardChecklist"; // Import the new CardChecklist component
+import CardChecklist from "./CardChecklist";
+import AddCardToTemplatePopup from "../Template/AddCardToTemplatePopup";
+import { useSession } from "next-auth/react";
 
 interface CardListProps {
     list: List;
@@ -23,7 +25,12 @@ export default function CardList({ list, onEditCard, onAddCard, permission }: Ca
     const [viewPopupVisible, setViewPopupVisible] = useState(false);
     const [deletePopupVisible, setDeletePopupVisible] = useState(false);
     const [memberPopupVisible, setMemberPopupVisible] = useState(false);
-    const [checklistPopupVisible, setChecklistPopupVisible] = useState(false); // State for checklist popup
+    const [checklistPopupVisible, setChecklistPopupVisible] = useState(false);
+    const [addCardToTemplatePopupVisible, setAddCardToTemplatePopupVisible] = useState(false);
+    const { data: session } = useSession();
+    if (!session) {
+        return null;
+      }
 
     useEffect(() => {
         setCards(list.cards);
@@ -88,12 +95,36 @@ export default function CardList({ list, onEditCard, onAddCard, permission }: Ca
     };
 
     const handleChecklist = () => {
-        setChecklistPopupVisible(true); // Show checklist popup
+        setChecklistPopupVisible(true);
         handleClosePopup();
     };
 
     const handleCloseChecklistPopup = () => {
-        setChecklistPopupVisible(false); // Hide checklist popup
+        setChecklistPopupVisible(false);
+    };
+
+    const handleSaveAsTemplate = () => {
+        setAddCardToTemplatePopupVisible(true);
+        handleClosePopup();
+    };
+
+    const handleCloseAddCardToTemplatePopup = () => {
+        setAddCardToTemplatePopupVisible(false);
+    };
+
+    const templateCard = (card: Card) => {
+        const myCard: Template = {
+            id: crypto.randomUUID(),
+            name: card.name,
+            description: card.description,
+            date_start: card.date_start,
+            date_end: card.date_end,
+            color: card.color,
+            image: card.image || "",
+            map: card.map,
+            userId: session.user.id
+        }
+        return myCard;
     };
 
     return (
@@ -137,7 +168,8 @@ export default function CardList({ list, onEditCard, onAddCard, permission }: Ca
                             onEdit={handleEdit}
                             onMember={handleMemberCard}
                             onDelete={handleDelete}
-                            onChecklist={handleChecklist} // Add the checklist handler
+                            onChecklist={handleChecklist}
+                            onSaveAsTemplate={handleSaveAsTemplate}
                             position={popupPosition}
                             permission={permission}
                         />
@@ -176,6 +208,14 @@ export default function CardList({ list, onEditCard, onAddCard, permission }: Ca
                                 cid={selectedCard.id}
                                 lid={selectedCard.list}
                                 updateCard={handleCardUpdate}
+                            />
+                        </div>
+                    )}
+                    {addCardToTemplatePopupVisible && selectedCard && (
+                        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-15">
+                            <AddCardToTemplatePopup
+                                onClose={handleCloseAddCardToTemplatePopup}
+                                card={templateCard(selectedCard)}
                             />
                         </div>
                     )}

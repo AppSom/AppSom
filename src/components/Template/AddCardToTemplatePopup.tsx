@@ -1,37 +1,36 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { Card, Template } from "../../../interface";
+import { Template } from "../../../interface";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import CreateCard from "@/lib/Card-template/createCard";
 import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
-import 'leaflet/dist/leaflet.css';
-import 'leaflet-defaulticon-compatibility';
-import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css';
-import UseTemplatePopup from "../Template/UseTemplatePopup";
+import { useSession } from "next-auth/react";
 
-interface AddCardPopupProps {
-    listId: string;
+interface AddCardToTemplatePopupProps {
+    card: Template;
     onClose: () => void;
-    onSave: (newCard: Card) => void;
 }
 
-const AddCardPopup: React.FC<AddCardPopupProps> = ({ listId, onClose, onSave }) => {
-    const today = new Date().toISOString().split('T')[0];
-    const [name, setName] = useState<string>("");
-    const [description, setDescription] = useState<string>("");
-    const [dateStart, setDateStart] = useState<string>(today);
-    const [dateEnd, setDateEnd] = useState<string>("");
-    const [color, setColor] = useState<string>("orange");
-    const [image, setImage] = useState<string>("");
-    const [hasMap, setMap] = useState<boolean>(false);
-    const [position, setPosition] = useState([13.7563, 100.5018]);
-    const [showTemplatePopup, setShowTemplatePopup] = useState<boolean>(false);
+const AddCardToTemplatePopup: React.FC<AddCardToTemplatePopupProps> = ({ card, onClose }) => {
+    const [name, setName] = useState<string>(card.name);
+    const [description, setDescription] = useState<string>(card.description);
+    const [dateStart, setDateStart] = useState<string>(card.date_start);
+    const [dateEnd, setDateEnd] = useState<string>(card.date_end);
+    const [color, setColor] = useState<string>(card.color);
+    const [image, setImage] = useState<string>(card.image);
+    const [hasMap, setMap] = useState<boolean>(card.map !== "");
+    const [position, setPosition] = useState(card.map ? card.map.split(",").map(Number) : [13.7563, 100.5018]);
     const popupRef = useRef<HTMLDivElement>(null);
+    const { data: session } = useSession();
+    if (!session) {
+        return null;
+      }
 
-    const handleSave = () => {
+    const handleSave = async () => {
         if (!name || !description || !dateStart || !dateEnd || (hasMap && !position)) {
-            toast.error('Please fill in all the Card details', {
+            toast.error('Please fill in all the template details', {
                 position: "bottom-right",
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -55,7 +54,7 @@ const AddCardPopup: React.FC<AddCardPopupProps> = ({ listId, onClose, onSave }) 
             });
             return;
         } else {
-            toast.success('Add Card Success', {
+            toast.success('Add Template Success', {
                 position: "bottom-right",
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -66,24 +65,25 @@ const AddCardPopup: React.FC<AddCardPopupProps> = ({ listId, onClose, onSave }) 
                 theme: "light",
             });
         }
+
         var mapLocation = "";
         if (hasMap && position) {
             mapLocation = `${position[0]},${position[1]}`;
         }
-        const newCard: Card = {
+
+        const newTemplate: Template = {
             id: crypto.randomUUID(),
             name,
             description,
             date_start: dateStart,
             date_end: dateEnd,
             color,
-            member: [],
-            list: listId,
             image: image || "",
             map: mapLocation,
-            CheckList: []
+            userId: session.user.id
         };
-        onSave(newCard);
+
+        await CreateCard(newTemplate);
         onClose();
     };
 
@@ -140,32 +140,21 @@ const AddCardPopup: React.FC<AddCardPopupProps> = ({ listId, onClose, onSave }) 
         );
     };
 
-    const handleUseTemplate = (template: Template) => {
-        setName(template.name);
-        setDescription(template.description);
-        setDateStart(template.date_start);
-        setDateEnd(template.date_end);
-        setColor(template.color);
-        setImage(template.image);
-        setMap(template.map !== "");
-        setPosition(template.map ? template.map.split(",").map(Number) : [13.7563, 100.5018]);
-    };
-
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
             <div ref={popupRef} className="bg-white p-5 rounded shadow-lg w-100 relative z-50 flex flex-col">
-                <h2 className="text-xl font-bold mb-5 text-center text-black">Add New Card</h2>
+                <h2 className="text-xl font-bold mb-5 text-center text-black">Add Card as Template</h2>
                 <div className="flex flex-row gap-5">
                     <div>
                         <input
                             type="text"
-                            placeholder="Card Name"
+                            placeholder="Template Name"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                             className="w-full mb-3 p-2 border rounded border-gray-500 text-black"
                         />
                         <textarea
-                            placeholder="Card Description"
+                            placeholder="Template Description"
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
                             className="w-full mb-3 p-2 border rounded border-gray-500 text-black"
@@ -238,25 +227,13 @@ const AddCardPopup: React.FC<AddCardPopupProps> = ({ listId, onClose, onSave }) 
                         onClick={handleSave}
                         className="bg-orange-500 text-white p-2 px-10 font-bold rounded"
                     >
-                        Save
-                    </button>
-                    <button
-                        onClick={() => setShowTemplatePopup(true)}
-                        className="bg-orange-500 text-white p-2 px-8 font-bold rounded"
-                    >
-                        Use Template
+                        Save as Template
                     </button>
                 </div>
-                {showTemplatePopup && (
-                    <UseTemplatePopup
-                        onClose={() => setShowTemplatePopup(false)}
-                        onSelect={handleUseTemplate}
-                    />
-                )}
             </div>
             <ToastContainer />
         </div>
     );
 };
 
-export default AddCardPopup;
+export default AddCardToTemplatePopup;
