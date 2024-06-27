@@ -11,7 +11,7 @@ interface ViewCardPopupProps {
     onClose: () => void;
     cid: string;
     lid: string;
-    updateCard: (updatedCard: Card) => void; // Add a callback to update the card in the parent
+    updateCard: (updatedCard: Card) => void;
 }
 
 const ViewCardPopup: React.FC<ViewCardPopupProps> = ({ onClose, cid, lid, updateCard }) => {
@@ -20,7 +20,6 @@ const ViewCardPopup: React.FC<ViewCardPopupProps> = ({ onClose, cid, lid, update
     const [board, setBoard] = useState<Board | null>(null);
     const [members, setMembers] = useState<User[]>([]);
     const [checklists, setChecklists] = useState<CheckList[]>([]);
-    const [isAddChecklistPopupOpen, setIsAddChecklistPopupOpen] = useState(false);
     const popupRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {

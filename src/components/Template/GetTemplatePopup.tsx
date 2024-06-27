@@ -12,6 +12,7 @@ import CreateCard from '@/lib/Card-template/createCard';
 import DeleteCardById from '@/lib/Card-template/deleteCard';
 import UpdateCardById from '@/lib/Card-template/editCard';
 import { useSession } from 'next-auth/react';
+import ViewTemplatePopup from './ViewTemplatePopup';
 
 interface GetTemplatePopupProps {
     onClose: () => void;
@@ -27,22 +28,30 @@ const GetTemplatePopup: React.FC<GetTemplatePopupProps> = ({ onClose }) => {
     const [templateToEdit, setTemplateToEdit] = useState<Template | null>(null);
     const [templateToDelete, setTemplateToDelete] = useState<Template | null>(null);
     const popupRef = useRef<HTMLDivElement>(null);
+    const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null);
 
     const { data: session } = useSession();
     if (!session) {
         return null;
     }
 
+    const handleTemplateClick = (template: Template) => {
+        setSelectedTemplate(template);
+    };
+
+    const handleClosePopup = () => {
+        setSelectedTemplate(null);
+    };
+
     useEffect(() => {
         const fetchTemplates = async () => {
             const data = await GetTemplateCard();
             if(session.user.role !== "ADMIN"){
-                const filteredData = data.filter(data => data.userId === session.user.id);
-                setTemplates(filteredData)
+                const filteredData = data.filter((data: Template) => data.userId === session.user.id);
+                setTemplates(filteredData);
             } else {
                 setTemplates(data);
             }
-            
         };
         fetchTemplates();
     }, []);
@@ -72,7 +81,7 @@ const GetTemplatePopup: React.FC<GetTemplatePopupProps> = ({ onClose }) => {
         await CreateCard(newTemplate);
         const updatedTemplates = await GetTemplateCard();
         if(session.user.role !== "ADMIN"){
-            updatedTemplates.filter(data => data.userId === session.user.id);
+            updatedTemplates.filter((data: Template) => data.userId === session.user.id);
         }
         setTemplates(updatedTemplates);
         toast.success('Template Added Successfully', {
@@ -96,8 +105,7 @@ const GetTemplatePopup: React.FC<GetTemplatePopupProps> = ({ onClose }) => {
         const updatedTemplates = templates.map((template) =>
             template.id === updatedCard.id ? updatedCard : template
         );
-        console.log(updatedCard)
-        await UpdateCardById(updatedCard)
+        await UpdateCardById(updatedCard);
         setTemplates(updatedTemplates);
         toast.success('Template Updated Successfully', {
             position: "bottom-right",
@@ -162,18 +170,22 @@ const GetTemplatePopup: React.FC<GetTemplatePopupProps> = ({ onClose }) => {
                 />
                 <div className="mb-3 max-h-64 overflow-y-auto">
                     {displayedTemplates.map(template => (
-                        <div key={template.id} className="bg-gray-400 p-3 rounded shadow-md mb-2 flex items-center">
+                        <button
+                            key={template.id}
+                            className="bg-gray-400 p-3 rounded shadow-md mb-2 flex items-center w-full text-left"
+                            onClick={() => handleTemplateClick(template)}
+                        >
                             <div className="flex-grow">
                                 <h3 className="font-semibold">{template.name}</h3>
                                 <p>{template.description}</p>
                             </div>
-                            <button onClick={() => handleEditTemplate(template)} className="text-blue-500 mx-2">
+                            <button onClick={(e) => { e.stopPropagation(); handleEditTemplate(template); }} className="text-blue-500 mx-2">
                                 <FontAwesomeIcon icon={faEdit} />
                             </button>
-                            <button onClick={() => handleDeleteTemplate(template)} className="text-red-500">
+                            <button onClick={(e) => { e.stopPropagation(); handleDeleteTemplate(template); }} className="text-red-500">
                                 <FontAwesomeIcon icon={faTrash} />
                             </button>
-                        </div>
+                        </button>
                     ))}
                 </div>
                 <div className="flex justify-between items-center">
@@ -208,6 +220,11 @@ const GetTemplatePopup: React.FC<GetTemplatePopupProps> = ({ onClose }) => {
                             onClose={handleCloseDeleteTemplate}
                             onDelete={confirmDeleteTemplate}
                         />
+                    </div>
+                )}
+                {selectedTemplate && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-15">
+                    <ViewTemplatePopup template={selectedTemplate} onClose={handleClosePopup} />
                     </div>
                 )}
             </div>
