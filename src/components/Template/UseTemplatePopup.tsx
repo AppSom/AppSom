@@ -5,6 +5,7 @@ import { Template } from "../../../interface";
 import GetTemplateCard from "@/lib/Card-template/readCard";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useSession } from "next-auth/react";
 
 interface UseTemplatePopupProps {
     onClose: () => void;
@@ -16,11 +17,20 @@ const UseTemplatePopup: React.FC<UseTemplatePopupProps> = ({ onClose, onSelect }
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [searchResults, setSearchResults] = useState<Template[]>([]);
     const popupRef = useRef<HTMLDivElement>(null);
+    const { data: session } = useSession();
+    if (!session) {
+        return null;
+    }
 
     useEffect(() => {
         const fetchTemplates = async () => {
             const data = await GetTemplateCard();
-            setTemplates(data);
+            if(session.user.role !== "ADMIN"){
+                const filteredData = data.filter((data: Template) => data.userId === session.user.id);
+                setTemplates(filteredData);
+            } else {
+                setTemplates(data);
+            }
         };
         fetchTemplates();
     }, []);
