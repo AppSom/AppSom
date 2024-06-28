@@ -191,7 +191,7 @@ const AddTemplatePopup: React.FC<AddTemplatePopupProps> = ({ onClose, onSave }) 
                             {image && convertBase64ToImage(image)}
                         </div>
                         <div className="mb-3">
-                            <label htmlFor="hasMap">Map Included? </label>
+                            <label htmlFor="hasMap" className="text-black">Map Included? </label>
                             <input id="hasMap" type="checkbox" checked={hasMap} onChange={() => setMap(!hasMap)} />
                         </div>
                         {
