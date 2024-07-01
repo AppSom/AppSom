@@ -487,7 +487,6 @@ const BoardIdPage: React.FC<BoardIdPageProps> = ({ params }) => {
                         onClose={() => setShowViewCardPopup(false)}
                         cid={selectedCard.id}
                         lid={selectedCard.list}
-                        updateCard={handleCardUpdate}
                     />
                 </div>
             )}

@@ -260,7 +260,9 @@
               "date_start": "2024-06-25",
               "date_end": "2024-06-26",
               "color": "blue",
-              "member": [],
+              "member": [
+                "75c8ba78-d371-4ff6-be29-1139cfebf33c"
+              ],
               "list": "56cd88a5-6f92-4a67-8efe-ecad5d689a6d",
               "image": "",
               "map": "",

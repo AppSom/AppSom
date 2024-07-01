@@ -11,10 +11,9 @@ interface ViewCardPopupProps {
     onClose: () => void;
     cid: string;
     lid: string;
-    updateCard: (updatedCard: Card) => void;
 }
 
-const ViewCardPopup: React.FC<ViewCardPopupProps> = ({ onClose, cid, lid, updateCard }) => {
+const ViewCardPopup: React.FC<ViewCardPopupProps> = ({ onClose, cid, lid }) => {
     const [card, setCard] = useState<Card | null>(null);
     const [list, setList] = useState<List | null>(null);
     const [board, setBoard] = useState<Board | null>(null);
